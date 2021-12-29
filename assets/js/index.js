@@ -14,6 +14,38 @@ window.addEventListener("load", function() {
         }
     })
 
+    function loginRequired() {
+        window.location.replace("/SASLogon/login");
+    }
+
+    function createTableView() {
+        console.log("Teste");
+    }
+
+    function getdata() {
+        let dataObject = {
+            "table": [{
+                "name": htmlSelect.value
+            }]
+        }
+
+        sasjs.request("services/common/getdata", dataObject, undefined, loginRequired).then((response) => {
+            let responseJson;
+
+            try {
+                responseJson = response;
+            } catch (e) {
+                console.error(e);
+            }
+
+            if (responseJson && responseJson.status === 449) {
+                getdata();
+            } else if (responseJson) {
+                createTableView();
+            }
+        });
+    }
+
     function createSelectListas(listas) {
         const htmlSelect = document.querySelector("#tableselect");
 
@@ -24,13 +56,7 @@ window.addEventListener("load", function() {
             htmlSelect.options.add(option);
         });
 
-        htmlSelect.addEventListener("change", function() {
-            console.log(htmlSelect.value);
-        });
-    }
-
-    function loginRequired() {
-        window.location.replace("/SASLogon/login");
+        htmlSelect.addEventListener("change", getdata);
     }
 
     function appinit() {
