@@ -23,11 +23,12 @@ window.addEventListener("load", function() {
     }
 
     function getdata() {
+        /** @type {HTMLSelectElement} */
         const htmlSelect = document.querySelector("#tableselect");
 
         let dataObject = {
-            "selectedList": [{
-                "listReference": htmlSelect.value
+            "fromjs": [{
+                "listref": htmlSelect.options[htmlSelect.selectedIndex].value
             }]
         }
 
@@ -49,6 +50,7 @@ window.addEventListener("load", function() {
     }
 
     function createSelectListas(listas) {
+        /** @type {HTMLSelectElement} */
         const htmlSelect = document.querySelector("#tableselect");
 
         listas.forEach((lista) => {
