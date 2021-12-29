@@ -23,9 +23,11 @@ window.addEventListener("load", function() {
     }
 
     function getdata() {
+        const htmlSelect = document.querySelector("#tableselect");
+
         let dataObject = {
-            "table": [{
-                "name": htmlSelect.value
+            "selectedList": [{
+                "listReference": htmlSelect.value
             }]
         }
 
