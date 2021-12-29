@@ -24,6 +24,10 @@ window.addEventListener("load", function() {
         });
     }
 
+    function loginRequired() {
+        window.location.replace("/SASLogon/login");
+    }
+
     function appinit() {
         sasjs.request("services/common/appinit", null, undefined, loginRequired).then((response) => {
             let responseJson;
