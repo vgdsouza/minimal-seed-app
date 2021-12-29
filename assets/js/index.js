@@ -3,7 +3,7 @@ window.addEventListener("load", function() {
         appLoc: "/Public/app/ICL",
         serverType: "SASVIYA",
         serverUrl: "",
-        debug: false,
+        debug: true,
         loginMechanism: "Redirected"
     });
 
@@ -27,8 +27,8 @@ window.addEventListener("load", function() {
         const htmlSelect = document.querySelector("#tableselect");
 
         let dataObject = {
-            "fromjs": [{
-                "listref": htmlSelect.options[htmlSelect.selectedIndex].value
+            "tbl": [{
+                "col": String(htmlSelect.options[htmlSelect.selectedIndex].value)
             }]
         }
 
