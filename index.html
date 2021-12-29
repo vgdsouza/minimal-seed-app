@@ -8,24 +8,25 @@
         <link rel="stylesheet" href="assets/css/index.css" />
     </head>
     <body id="body">
-        <nav id="nav" class="aside">
+        <!-- Nav -->
+        <nav id="nav" class="myflex">
             <img src="assets/img/bancopan.svg" />
             <p id="currentUser"></p>
         </nav>
-        <main id="main">
-            <section id="notLoggedIn" class="content">
-                <h1>Clique no botão abaixo para fazer login</h1>
-                <a class="btn btn-primary" href="/SASLogon/login">Login</a>
-            </section>
-            <section id="loggedIn" class="content">
-                <select id="tableselect" class="form-select">
-                    <option selected>Selecione uma lista</option>
-                </select>
-                <div id="tableview">
-                </div>
-            </section>
-        </main>
-        <footer id="footer" class="aside">
+        <!-- Main -->
+        <div id="spinner" class="myflex">
+            <div class="spinner-border"></div>
+            <strong>Carregando...</strong>
+        </div>
+        <div id="main" class="myflex">
+            <select id="tableselect" class="form-select">
+                <option selected>Selecione uma lista</option>
+            </select>
+            <div id="tableview">
+            </div>
+        </div>
+        <!-- Footer -->
+        <footer id="footer" class="myflex">
             <p>Banco PAN S.A. (“PAN”), instituição financeira, inscrita sob o CNPJ nº 59.285.411/0001-13, com sede na Avenida Paulista, nº 1.374, 16º andar, Bela Vista, São Paulo – SP.</p>
         </footer>
         <!-- JavaScript -->

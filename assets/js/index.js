@@ -9,18 +9,23 @@ window.addEventListener("load", function() {
 
     sasjs.checkSession().then((res) => {
         if (res.isLoggedIn) {
-            document.querySelector("#notLoggedIn").style.display = "none";
-            document.querySelector("#loggedIn").style.display = "flex";
+            document.querySelector("#spinner").style.display = "none";
+            document.querySelector("#main").style.display = "flex";
         }
     })
 
     function createSelectListas(listas) {
         const htmlSelect = document.querySelector("#tableselect");
+
         listas.forEach((lista) => {
             const option = new Option();
-            option.value = lista['table_reference'];
-            option.text = lista['list_name'];
+            option.value = lista['TABLE_REFERENCE'];
+            option.text = lista['LIST_NAME'];
             htmlSelect.options.add(option);
+        });
+
+        htmlSelect.addEventListener("change", function() {
+            console.log(htmlSelect.value);
         });
     }
 
@@ -40,8 +45,8 @@ window.addEventListener("load", function() {
 
             if (responseJson && responseJson.status === 449) {
                 appinit();
-            } else if (responseJson && responseJson.areas) {
-                createSelectListas(responseJson.areas);
+            } else if (responseJson && responseJson.listas) {
+                createSelectListas(responseJson.listas);
             }
         });
     }
