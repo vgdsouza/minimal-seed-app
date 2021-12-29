@@ -18,8 +18,8 @@ window.addEventListener("load", function() {
         window.location.replace("/SASLogon/login");
     }
 
-    function createTableView() {
-        console.log("Teste");
+    function createTableView(lista) {
+        console.log(lista);
     }
 
     function getdata() {
@@ -32,7 +32,7 @@ window.addEventListener("load", function() {
             }]
         }
 
-        sasjs.request("services/common/getdata", dataObject, undefined, loginRequired).then((response) => {
+        sasjs.request("services/common/upload", dataObject, undefined, loginRequired).then((response) => {
             let responseJson;
 
             try {
@@ -44,7 +44,7 @@ window.addEventListener("load", function() {
             if (responseJson && responseJson.status === 449) {
                 getdata();
             } else if (responseJson) {
-                createTableView();
+                createTableView(responseJson.lista);
             }
         });
     }

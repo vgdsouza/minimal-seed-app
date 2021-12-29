@@ -40,18 +40,18 @@
 }
 
 #tableselect {
-  max-width: 900px;
+  max-width: 720px;
   margin-bottom: 1rem;
 }
 
 #tableview {
   width: 100%;
-  max-width: 900px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
+  overflow: scroll;
 }
 
 p {
