@@ -2,16 +2,12 @@
 <html>
   <head>
     <meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="shortcut icon" href="./favicon.ico" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="assets/img/favicon.ico" />
+    <link rel="stylesheet" href="assets/css/style.css" />
     <script>
       function initSasJs() {
         sasjs = new SASjs.default({
-          appLoc: '/Public/app2/minimal-seed-app',
+          appLoc: '/Public/app/ICL',
           serverType: 'SASVIYA',
           serverUrl: '',
           debug: false,
@@ -22,8 +18,8 @@
         })
       }
     </script>
-    <script src="sasjs.js"></script>
-    <script src="scripts.js"></script>
+    <script src="assets/js/sasjs.js"></script>
+    <script src="assets/js/scripts.js"></script>
   </head>
   <body onload="initSasJs()">
     <h1>Hello!</h1>
