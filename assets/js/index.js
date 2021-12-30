@@ -34,6 +34,7 @@ window.addEventListener("load", function() {
             while (lastRow.firstChild) {
                 lastRow.removeChild(lastRow.lastChild);
             }
+            tbody.removeChild(tbody.lastChild);
         }
     }
 
@@ -46,20 +47,20 @@ window.addEventListener("load", function() {
         const tbody = document.querySelector("#tbody");
 
         colunas.forEach((col) => {
-            const tcell = document.createElement("th");
-            tcell.scope = "col";
-            tcell.text = col.NAME;
-            theadrow.appendChild(tcell);
+            const th = document.createElement("th");
+            th.scope = "col";
+            th.innerText = col.NAME;
+            theadrow.appendChild(th);
         });
 
         linhas.forEach((linha) => {
-            const trow = document.createElement("tr");
+            const tr = document.createElement("tr");
             colunas.forEach((col) => {
-                const tcell = document.createElement("td");
-                tcell.text = linha[col.NAME];
-                trow.appendChild(tcell);
+                const td = document.createElement("td");
+                td.innerText = linha[col.NAME];
+                tr.appendChild(td);
             });
-            tbody.appendChild(trow);
+            tbody.appendChild(tr);
         });
     }
 
