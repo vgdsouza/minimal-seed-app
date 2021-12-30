@@ -46,20 +46,20 @@ window.addEventListener("load", function() {
         const tbody = document.querySelector("#tbody");
 
         colunas.forEach((col) => {
-            const tcell = new HTMLTableCellElement();
+            const tcell = document.createElement("th");
             tcell.scope = "col";
             tcell.text = col.NAME;
-            theadrow.cells.add(tcell);
+            theadrow.appendChild(tcell);
         });
 
         linhas.forEach((linha) => {
-            const trow = new HTMLTableRowElement();
+            const trow = document.createElement("tr");
             colunas.forEach((col) => {
-                const tcell = new HTMLTableCellElement();
+                const tcell = document.createElement("td");
                 tcell.text = linha[col.NAME];
-                trow.cells.add(tcell);
+                trow.appendChild(tcell);
             });
-            tbody.rows.add(trow);
+            tbody.appendChild(trow);
         });
     }
 
