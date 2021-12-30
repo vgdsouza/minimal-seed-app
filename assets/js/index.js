@@ -18,8 +18,49 @@ window.addEventListener("load", function() {
         window.location.replace("/SASLogon/login");
     }
 
-    function createTableView(lista) {
-        console.log(lista);
+    function clearTable() {
+        /** @type {HTMLTableRowElement} */
+        const theadrow = document.querySelector("#thead");
+        /** @type {HTMLTableSectionElement} */
+        const tbody = document.querySelector("#tbody");
+
+        while (theadrow.firstChild) {
+            theadrow.removeChild(theadrow.lastChild);
+        }
+
+        while (tbody.firstChild) {
+            /** @type {HTMLTableRowElement} */
+            const lastRow = tbody.lastChild;
+            while (lastRow.firstChild) {
+                lastRow.removeChild(lastRow.lastChild);
+            }
+        }
+    }
+
+    function createTableView(colunas, linhas) {
+        clearTable();
+
+        /** @type {HTMLTableRowElement} */
+        const theadrow = document.querySelector("#thead");
+        /** @type {HTMLTableSectionElement} */
+        const tbody = document.querySelector("#tbody");
+
+        colunas.forEach((col) => {
+            const tcell = new HTMLTableCellElement();
+            tcell.scope = "col";
+            tcell.text = col.NAME;
+            theadrow.cells.add(tcell);
+        });
+
+        linhas.forEach((linha) => {
+            const trow = new HTMLTableRowElement();
+            colunas.forEach((col) => {
+                const tcell = new HTMLTableCellElement();
+                tcell.text = linha[col.NAME];
+                trow.cells.add(tcell);
+            });
+            tbody.rows.add(trow);
+        });
     }
 
     function getdata() {
@@ -32,7 +73,7 @@ window.addEventListener("load", function() {
             }]
         }
 
-        sasjs.request("services/common/upload", dataObject, undefined, loginRequired).then((response) => {
+        sasjs.request("services/common/getdata", dataObject, undefined, loginRequired).then((response) => {
             let responseJson;
 
             try {
@@ -44,7 +85,9 @@ window.addEventListener("load", function() {
             if (responseJson && responseJson.status === 449) {
                 getdata();
             } else if (responseJson) {
-                createTableView(responseJson.lista);
+                let colunas = responseJson.WORK.LISTA.colattrs;
+                let linhas = responseJson.lista;
+                createTableView(colunas, linhas);
             }
         });
     }
