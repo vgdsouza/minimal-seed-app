@@ -14,6 +14,7 @@
 }
 
 #spinner {
+  display: none;
   width: 21ch;
   justify-content: space-between;
   color: #414141;

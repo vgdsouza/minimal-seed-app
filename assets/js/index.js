@@ -126,4 +126,37 @@ window.addEventListener("load", function() {
     }
 
     appinit();
+
+    function printFile() {
+        const reader = new FileReader();
+        /** @type {HTMLInputElement} */
+        const htmlFile = document.querySelector("#formFile");
+
+        reader.addEventListener("load", function(event) {
+            const str = event.target.result;
+            const linhas = str.split("\n");
+            const colunas = linhas[0].trim().toUpperCase().split("|");
+
+            let dataObject = {
+                "tbl": []
+            }
+
+            let temp;
+            for (let i = 1; i < linhas.length; i++) {
+                temp = {};
+
+                for (let j = 0; j < colunas.length; j++) {
+                    temp[colunas[j]] = linhas[i].trim().split("|")[j];
+                }
+
+                dataObject["tbl"].push(temp);
+            }
+
+            console.log(dataObject);
+        })
+
+        reader.readAsText(htmlFile.files[0]);
+    }
+
+    document.querySelector("#foo").addEventListener("click", printFile);
 })
