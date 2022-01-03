@@ -69,8 +69,8 @@ window.addEventListener("load", function() {
         const htmlSelect = document.querySelector("#tableselect");
 
         let dataObject = {
-            "tbl": [{
-                "col": String(htmlSelect.options[htmlSelect.selectedIndex].value)
+            "obj": [{
+                "val": String(htmlSelect.options[htmlSelect.selectedIndex].value)
             }]
         }
 
@@ -138,7 +138,7 @@ window.addEventListener("load", function() {
             const colunas = linhas[0].trim().toUpperCase().split("|");
 
             let dataObject = {
-                "tbl": []
+                "obj": []
             }
 
             let temp;
@@ -149,7 +149,7 @@ window.addEventListener("load", function() {
                     temp[colunas[j]] = linhas[i].trim().split("|")[j];
                 }
 
-                dataObject["tbl"].push(temp);
+                dataObject["obj"].push(temp);
             }
 
             console.log(dataObject);
