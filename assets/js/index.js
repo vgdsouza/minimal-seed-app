@@ -9,8 +9,15 @@ window.addEventListener("load", function() {
 
     sasjs.checkSession().then((res) => {
         if (res.isLoggedIn) {
-            document.querySelector("#spinner").style.display = "none";
-            document.querySelector("#main").style.display = "flex";
+            /** @type {HTMLDivElement} */
+            const spinner = document.querySelector("#spinner");
+            spinner.style.display = "none";
+            /** @type {HTMLDivElement} */
+            const main = document.querySelector("#main");
+            main.style.display = "flex";
+            /** @type {HTMLParagraphElement} */
+            const currentUser = document.querySelector("#currentUser");
+            currentUser.textContent = res.SYSUSERID;
         }
     })
 
@@ -34,7 +41,7 @@ window.addEventListener("load", function() {
         }
     }
 
-    function createTableView(colunas, linhas) {
+    function createTableView(lista) {
         clearTable();
 
         /** @type {HTMLTableRowElement} */
@@ -42,21 +49,21 @@ window.addEventListener("load", function() {
         /** @type {HTMLTableSectionElement} */
         const tbody = document.querySelector("#tbody");
 
-        colunas.forEach((col) => {
+        Object.keys(lista).forEach((col) => {
             /** @type {HTMLTableCellElement} */
             const th = document.createElement("th");
             th.scope = "col";
-            th.innerText = col.NAME;
+            th.innerText = col;
             theadrow.appendChild(th);
         });
 
-        linhas.forEach((linha) => {
+        lista.forEach((linha) => {
             /** @type {HTMLTableRowElement} */
             const tr = document.createElement("tr");
-            colunas.forEach((col) => {
+            Object.keys(lista).forEach((col) => {
                 /** @type {HTMLTableCellElement} */
                 const td = document.createElement("td");
-                td.innerText = linha[col.NAME];
+                td.innerText = linha[col];
                 tr.appendChild(td);
             });
             tbody.appendChild(tr);
@@ -67,29 +74,33 @@ window.addEventListener("load", function() {
         /** @type {HTMLSelectElement} */
         const htmlSelect = document.querySelector("#tableselect");
 
-        let dataObject = {
-            "object": [{
-                "value": String(htmlSelect.options[htmlSelect.selectedIndex].value)
-            }]
+        let val = String(htmlSelect.options[htmlSelect.selectedIndex].value);
+
+        if (val === "vazio") {
+            clearTable();
+        } else {
+            let dataObject = {
+                "object": [{
+                    "value": val
+                }]
+            }
+
+            sasjs.request("services/common/getdata", dataObject).then((res) => {
+                let responseJson;
+
+                try {
+                    responseJson = res;
+                } catch (e) {
+                    console.error(e);
+                }
+
+                if (responseJson && responseJson.status === 449) {
+                    getdata();
+                } else if (responseJson) {
+                    createTableView(responseJson.lista);
+                }
+            });
         }
-
-        sasjs.request("services/common/getdata", dataObject).then((res) => {
-            let responseJson;
-
-            try {
-                responseJson = res;
-            } catch (e) {
-                console.error(e);
-            }
-
-            if (responseJson && responseJson.status === 449) {
-                getdata();
-            } else if (responseJson) {
-                let colunas = responseJson.WORK.LISTA.colattrs;
-                let linhas = responseJson.lista;
-                createTableView(colunas, linhas);
-            }
-        });
     }
 
     function createSelectListas(listas) {
