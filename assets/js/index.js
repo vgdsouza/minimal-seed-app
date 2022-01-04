@@ -15,9 +15,6 @@ window.addEventListener("load", function() {
             /** @type {HTMLDivElement} */
             const main = document.querySelector("#main");
             main.style.display = "flex";
-            /** @type {HTMLParagraphElement} */
-            const currentUser = document.querySelector("#currentUser");
-            currentUser.innerText = res.SYSUSERID;
         }
     })
 
@@ -135,12 +132,17 @@ window.addEventListener("load", function() {
             if (responseJson && responseJson.status === 449) {
                 appinit();
             } else if (responseJson && responseJson.listas) {
+                /** @type {HTMLParagraphElement} */
+                const currentUser = document.querySelector("#currentUser");
+                currentUser.innerText = responseJson.SYSUSERID;
                 createSelectListas(responseJson.listas);
             }
         });
     }
 
     function updatedata(dataObject) {
+        console.log(dataObject);
+
         sasjs.request("services/common/updatedata", dataObject).then((res) => {
             let responseJson;
 
@@ -163,34 +165,38 @@ window.addEventListener("load", function() {
         const htmlButton = document.querySelector("#tablebutton");
         /** @type {HTMLInputElement} */
         const htmlFile = document.querySelector("#tablefile");
-        /** @type {FileReader} */
-        const reader = new FileReader();
 
-        htmlButton.disabled = true;
+        /** @type {Promise} */
+        let asyncResult = new Promise((resolve, reject) => {
+            /** @type {FileReader} */
+            const reader = new FileReaderSync();
 
-        let dataObject = {
-            "object": []
-        }
+            htmlButton.disabled = true;
 
-        reader.addEventListener("load", function(event) {
-            const str = event.target.result;
-            const linhas = str.split("\n");
-            const colunas = linhas[0].trim().toUpperCase().split("|");
-
-            for (let i = 1; i < linhas.length; i++) {
-                let temp = {};
-
-                for (let j = 0; j < colunas.length; j++) {
-                    temp[colunas[j]] = linhas[i].trim().split("|")[j];
-                }
-
-                dataObject["object"].push(temp);
+            let dataObject = {
+                "object": []
             }
-        })
 
-        reader.readAsText(htmlFile.files[0]);
+            reader.onload = () => {
+                const str = resolve(reader.result);
+                const linhas = str.split("\n");
+                const colunas = linhas[0].trim().toUpperCase().split("|");
 
-        updatedata(dataObject)
+                for (let i = 1; i < linhas.length; i++) {
+                    let temp = {};
+
+                    for (let j = 0; j < colunas.length; j++) {
+                        temp[colunas[j]] = linhas[i].trim().split("|")[j];
+                    }
+
+                    dataObject["object"].push(temp);
+                }
+            }
+
+            reader.readAsText(htmlFile.files[0]);
+
+            updatedata(dataObject);
+        });
     }
 
     document.querySelector("#tablebutton").addEventListener("click", convertCsv);
