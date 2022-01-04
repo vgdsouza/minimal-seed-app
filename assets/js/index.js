@@ -143,7 +143,7 @@ window.addEventListener("load", function() {
     function updatedata(dataObject) {
         console.log(dataObject);
 
-        sasjs.request("services/common/updatedata", dataObject).then((res) => {
+        /*sasjs.request("services/common/updatedata", dataObject).then((res) => {
             let responseJson;
 
             try {
@@ -157,46 +157,49 @@ window.addEventListener("load", function() {
             } else if (responseJson && responseJson.listas) {
                 console.log("Sucesso!");
             }
-        });
+        });*/
     }
 
-    function convertCsv() {
+    const asyncRead = (file) => {
+        const reader = new FileReader();
+
+        return new Promise((resolve) => {
+          reader.onload = () => {
+            resolve(reader.result);
+          };
+
+          reader.readAsText(file);
+        });
+    };
+
+    async function convertCsv() {
         /** @type {HTMLButtonElement} */
         const htmlButton = document.querySelector("#tablebutton");
         /** @type {HTMLInputElement} */
         const htmlFile = document.querySelector("#tablefile");
 
-        /** @type {Promise} */
-        let asyncResult = new Promise((resolve, reject) => {
-            /** @type {FileReader} */
-            const reader = new FileReaderSync();
+        htmlButton.disabled = true;
 
-            htmlButton.disabled = true;
+        let dataObject = {
+            "object": []
+        }
 
-            let dataObject = {
-                "object": []
+        const str = await asyncRead(htmlFile.files[0]);
+
+        const linhas = str.split("\n");
+        const colunas = linhas[0].trim().toUpperCase().split("|");
+
+        for (let i = 1; i < linhas.length; i++) {
+            let temp = {};
+
+            for (let j = 0; j < colunas.length; j++) {
+                temp[colunas[j]] = linhas[i].trim().split("|")[j];
             }
 
-            reader.onload = () => {
-                const str = resolve(reader.result);
-                const linhas = str.split("\n");
-                const colunas = linhas[0].trim().toUpperCase().split("|");
+            dataObject["object"].push(temp);
+        }
 
-                for (let i = 1; i < linhas.length; i++) {
-                    let temp = {};
-
-                    for (let j = 0; j < colunas.length; j++) {
-                        temp[colunas[j]] = linhas[i].trim().split("|")[j];
-                    }
-
-                    dataObject["object"].push(temp);
-                }
-            }
-
-            reader.readAsText(htmlFile.files[0]);
-
-            updatedata(dataObject);
-        });
+        updatedata(dataObject);
     }
 
     document.querySelector("#tablebutton").addEventListener("click", convertCsv);
