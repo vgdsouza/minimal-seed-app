@@ -3,7 +3,7 @@ window.addEventListener("load", function() {
         appLoc: "/Public/app/ICL",
         serverType: "SASVIYA",
         serverUrl: "",
-        debug: true,
+        debug: false,
         loginMechanism: "Redirected"
     });
 
@@ -13,10 +13,6 @@ window.addEventListener("load", function() {
             document.querySelector("#main").style.display = "flex";
         }
     })
-
-    function loginRequired() {
-        window.location.replace("/SASLogon/login");
-    }
 
     function clearTable() {
         /** @type {HTMLTableRowElement} */
@@ -47,6 +43,7 @@ window.addEventListener("load", function() {
         const tbody = document.querySelector("#tbody");
 
         colunas.forEach((col) => {
+            /** @type {HTMLTableCellElement} */
             const th = document.createElement("th");
             th.scope = "col";
             th.innerText = col.NAME;
@@ -54,8 +51,10 @@ window.addEventListener("load", function() {
         });
 
         linhas.forEach((linha) => {
+            /** @type {HTMLTableRowElement} */
             const tr = document.createElement("tr");
             colunas.forEach((col) => {
+                /** @type {HTMLTableCellElement} */
                 const td = document.createElement("td");
                 td.innerText = linha[col.NAME];
                 tr.appendChild(td);
@@ -69,16 +68,16 @@ window.addEventListener("load", function() {
         const htmlSelect = document.querySelector("#tableselect");
 
         let dataObject = {
-            "obj": [{
-                "val": String(htmlSelect.options[htmlSelect.selectedIndex].value)
+            "object": [{
+                "value": String(htmlSelect.options[htmlSelect.selectedIndex].value)
             }]
         }
 
-        sasjs.request("services/common/getdata", dataObject, undefined, loginRequired).then((response) => {
+        sasjs.request("services/common/getdata", dataObject).then((res) => {
             let responseJson;
 
             try {
-                responseJson = response;
+                responseJson = res;
             } catch (e) {
                 console.error(e);
             }
@@ -98,6 +97,7 @@ window.addEventListener("load", function() {
         const htmlSelect = document.querySelector("#tableselect");
 
         listas.forEach((lista) => {
+            /** @type {HTMLOptionElement} */
             const option = new Option();
             option.value = lista['TABLE_REFERENCE'];
             option.text = lista['LIST_NAME'];
@@ -108,11 +108,11 @@ window.addEventListener("load", function() {
     }
 
     function appinit() {
-        sasjs.request("services/common/appinit", null, undefined, loginRequired).then((response) => {
+        sasjs.request("services/common/appinit", null).then((res) => {
             let responseJson;
 
             try {
-                responseJson = response;
+                responseJson = res;
             } catch (e) {
                 console.error(e);
             }
@@ -125,38 +125,60 @@ window.addEventListener("load", function() {
         });
     }
 
-    appinit();
+    function updatedata(dataObject) {
+        sasjs.request("services/common/updatedata", dataObject).then((res) => {
+            let responseJson;
 
-    function printFile() {
-        const reader = new FileReader();
+            try {
+                responseJson = res;
+            } catch (e) {
+                console.error(e);
+            }
+
+            if (responseJson && responseJson.status === 449) {
+                updatedata();
+            } else if (responseJson && responseJson.listas) {
+                console.log("Sucesso!");
+            }
+        });
+    }
+
+    function convertCsv() {
+        /** @type {HTMLButtonElement} */
+        const htmlButton = document.querySelector("#tablebutton");
         /** @type {HTMLInputElement} */
-        const htmlFile = document.querySelector("#formFile");
+        const htmlFile = document.querySelector("#tablefile");
+        /** @type {FileReader} */
+        const reader = new FileReader();
+
+        htmlButton.disabled = true;
+
+        let dataObject = {
+            "object": []
+        }
 
         reader.addEventListener("load", function(event) {
             const str = event.target.result;
             const linhas = str.split("\n");
             const colunas = linhas[0].trim().toUpperCase().split("|");
 
-            let dataObject = {
-                "obj": []
-            }
-
-            let temp;
             for (let i = 1; i < linhas.length; i++) {
-                temp = {};
+                let temp = {};
 
                 for (let j = 0; j < colunas.length; j++) {
                     temp[colunas[j]] = linhas[i].trim().split("|")[j];
                 }
 
-                dataObject["obj"].push(temp);
+                dataObject["object"].push(temp);
             }
-
-            console.log(dataObject);
         })
 
         reader.readAsText(htmlFile.files[0]);
+
+        updatedata(dataObject)
     }
 
-    document.querySelector("#foo").addEventListener("click", printFile);
+    document.querySelector("#tablebutton").addEventListener("click", convertCsv);
+
+    appinit();
 })
