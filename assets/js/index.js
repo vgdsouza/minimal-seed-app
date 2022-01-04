@@ -17,7 +17,7 @@ window.addEventListener("load", function() {
             main.style.display = "flex";
             /** @type {HTMLParagraphElement} */
             const currentUser = document.querySelector("#currentUser");
-            currentUser.textContent = res.SYSUSERID;
+            currentUser.innerText = res.SYSUSERID;
         }
     })
 
@@ -49,25 +49,29 @@ window.addEventListener("load", function() {
         /** @type {HTMLTableSectionElement} */
         const tbody = document.querySelector("#tbody");
 
-        Object.keys(lista).forEach((col) => {
-            /** @type {HTMLTableCellElement} */
-            const th = document.createElement("th");
-            th.scope = "col";
-            th.innerText = col;
-            theadrow.appendChild(th);
-        });
+        if (lista[0]) {
+            let colunas = Object.keys(lista[0]);
 
-        lista.forEach((linha) => {
-            /** @type {HTMLTableRowElement} */
-            const tr = document.createElement("tr");
-            Object.keys(lista).forEach((col) => {
+            colunas.forEach((col) => {
                 /** @type {HTMLTableCellElement} */
-                const td = document.createElement("td");
-                td.innerText = linha[col];
-                tr.appendChild(td);
+                const th = document.createElement("th");
+                th.scope = "col";
+                th.innerText = col;
+                theadrow.appendChild(th);
             });
-            tbody.appendChild(tr);
-        });
+
+            lista.forEach((linha) => {
+                /** @type {HTMLTableRowElement} */
+                const tr = document.createElement("tr");
+                colunas.forEach((col) => {
+                    /** @type {HTMLTableCellElement} */
+                    const td = document.createElement("td");
+                    td.innerText = linha[col];
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+        }
     }
 
     function getdata() {
