@@ -141,9 +141,7 @@ window.addEventListener("load", function() {
     }
 
     function updatedata(dataObject) {
-        console.log(dataObject);
-
-        /*sasjs.request("services/common/updatedata", dataObject).then((res) => {
+        sasjs.request("services/common/updatedata", dataObject).then((res) => {
             let responseJson;
 
             try {
@@ -157,7 +155,7 @@ window.addEventListener("load", function() {
             } else if (responseJson && responseJson.listas) {
                 console.log("Sucesso!");
             }
-        });*/
+        });
     }
 
     const asyncRead = (file) => {
