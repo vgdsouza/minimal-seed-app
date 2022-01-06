@@ -175,12 +175,15 @@ window.addEventListener("load", function() {
         const htmlButton = document.querySelector("#tablebutton");
         /** @type {HTMLInputElement} */
         const htmlFile = document.querySelector("#tablefile");
+        /** @type {HTMLSelectElement} */
+        const htmlSelect = document.querySelector("#tableselect");
 
         htmlButton.disabled = true;
 
-        let dataObject = {
-            "object": []
-        }
+        const val = String(htmlSelect.options[htmlSelect.selectedIndex].value);
+
+        let dataObject = {}
+        dataObject[val] = []
 
         const str = await asyncRead(htmlFile.files[0]);
 
@@ -194,7 +197,7 @@ window.addEventListener("load", function() {
                 temp[colunas[j]] = linhas[i].trim().split("|")[j];
             }
 
-            dataObject["object"].push(temp);
+            dataObject[val].push(temp);
         }
 
         updatedata(dataObject);
