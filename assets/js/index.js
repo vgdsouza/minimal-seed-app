@@ -7,17 +7,6 @@ window.addEventListener("load", function() {
         loginMechanism: "Redirected"
     });
 
-    sasjs.checkSession().then((res) => {
-        if (res.isLoggedIn) {
-            /** @type {HTMLDivElement} */
-            const spinner = document.querySelector("#spinner");
-            spinner.style.display = "none";
-            /** @type {HTMLDivElement} */
-            const main = document.querySelector("#main");
-            main.style.display = "flex";
-        }
-    })
-
     function clearTable() {
         /** @type {HTMLTableRowElement} */
         const theadrow = document.querySelector("#thead");
@@ -39,12 +28,12 @@ window.addEventListener("load", function() {
     }
 
     function createTableView(lista) {
-        clearTable();
-
         /** @type {HTMLTableRowElement} */
         const theadrow = document.querySelector("#thead");
         /** @type {HTMLTableSectionElement} */
         const tbody = document.querySelector("#tbody");
+
+        clearTable();
 
         if (lista[0]) {
             let colunas = Object.keys(lista[0]);
@@ -117,6 +106,10 @@ window.addEventListener("load", function() {
     function createSelectListas(listas) {
         /** @type {HTMLSelectElement} */
         const htmlSelect = document.querySelector("#tableselect");
+        /** @type {HTMLDivElement} */
+        const spinner = document.querySelector("#spinner");
+        /** @type {HTMLDivElement} */
+        const main = document.querySelector("#main");
 
         listas.forEach((lista) => {
             /** @type {HTMLOptionElement} */
@@ -125,6 +118,9 @@ window.addEventListener("load", function() {
             option.text = lista['LIST_NAME'];
             htmlSelect.options.add(option);
         });
+
+        spinner.style.display = "none";
+        main.style.display = "flex";
 
         htmlSelect.addEventListener("change", getdata);
     }
@@ -150,6 +146,12 @@ window.addEventListener("load", function() {
         });
     }
 
+    sasjs.checkSession().then((res) => {
+        if (res.isLoggedIn) {
+            appinit();
+        }
+    })
+
     function updatedata(dataObject) {
         sasjs.request("services/common/updatedata", dataObject).then((res) => {
             let responseJson;
@@ -168,7 +170,7 @@ window.addEventListener("load", function() {
         });
     }
 
-    const asyncRead = (file) => {
+    function filePromise(file) {
         const reader = new FileReader();
 
         return new Promise((resolve) => {
@@ -178,7 +180,7 @@ window.addEventListener("load", function() {
 
           reader.readAsText(file);
         });
-    };
+    }
 
     async function convertCsv() {
         /** @type {HTMLButtonElement} */
@@ -196,7 +198,7 @@ window.addEventListener("load", function() {
         let dataObject = {}
         dataObject[val] = []
 
-        const str = await asyncRead(htmlFile.files[0]);
+        const str = await filePromise(htmlFile.files[0]);
 
         const linhas = str.split("\n");
         const colunas = linhas[0].trim().toUpperCase().split("|");
@@ -215,6 +217,4 @@ window.addEventListener("load", function() {
     }
 
     document.querySelector("#tablebutton").addEventListener("click", convertCsv);
-
-    appinit();
 })
