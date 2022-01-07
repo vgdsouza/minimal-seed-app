@@ -74,16 +74,26 @@ window.addEventListener("load", function() {
     function getdata() {
         /** @type {HTMLSelectElement} */
         const htmlSelect = document.querySelector("#tableselect");
+        /** @type {HTMLInputElement} */
+        const htmlFile = document.querySelector("#tablefile");
+        /** @type {HTMLButtonElement} */
+        const htmlButton = document.querySelector("#tablebutton");
 
-        let val = String(htmlSelect.options[htmlSelect.selectedIndex].value);
+        const val = String(htmlSelect.options[htmlSelect.selectedIndex].value);
 
         if (val === "vazio") {
+            htmlButton.disabled = true;
+            htmlFile.disabled = true;
+            htmlFile.value = "";
+
             clearTable();
         } else {
-            let dataObject = {
-                "object": [{
-                    "value": val
-                }]
+            htmlButton.disabled = false;
+            htmlFile.disabled = false;
+            htmlFile.value = "";
+
+            const dataObject = {
+                [val]: [{}]
             }
 
             sasjs.request("services/common/getdata", dataObject).then((res) => {
@@ -179,6 +189,7 @@ window.addEventListener("load", function() {
         const htmlSelect = document.querySelector("#tableselect");
 
         htmlButton.disabled = true;
+        htmlFile.disabled = true;
 
         const val = String(htmlSelect.options[htmlSelect.selectedIndex].value);
 
