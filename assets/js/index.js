@@ -33,8 +33,6 @@ window.addEventListener("load", function() {
         /** @type {HTMLTableSectionElement} */
         const tbody = document.querySelector("#tbody");
 
-        clearTable();
-
         if (lista[0]) {
             let colunas = Object.keys(lista[0]);
 
@@ -68,19 +66,15 @@ window.addEventListener("load", function() {
         /** @type {HTMLButtonElement} */
         const htmlButton = document.querySelector("#tablebutton");
 
+        clearTable();
+
         const val = String(htmlSelect.options[htmlSelect.selectedIndex].value);
 
-        if (val === "vazio") {
+        if (val === "") {
             htmlButton.disabled = true;
             htmlFile.disabled = true;
             htmlFile.value = "";
-
-            clearTable();
         } else {
-            htmlButton.disabled = false;
-            htmlFile.disabled = false;
-            htmlFile.value = "";
-
             const dataObject = {
                 [val]: [{}]
             }
@@ -100,16 +94,24 @@ window.addEventListener("load", function() {
                     createTableView(responseJson.lista);
                 }
             });
+
+            htmlButton.disabled = false;
+            htmlFile.disabled = false;
+            htmlFile.value = "";
         }
     }
 
-    function createSelectListas(listas) {
+    function createSelectListas(listas, usuario) {
         /** @type {HTMLSelectElement} */
         const htmlSelect = document.querySelector("#tableselect");
         /** @type {HTMLDivElement} */
         const spinner = document.querySelector("#spinner");
         /** @type {HTMLDivElement} */
         const main = document.querySelector("#main");
+        /** @type {HTMLParagraphElement} */
+        const currentUser = document.querySelector("#currentUser");
+        /** @type {HTMLInputElement} */
+        const htmlFile = document.querySelector("#tablefile");
 
         listas.forEach((lista) => {
             /** @type {HTMLOptionElement} */
@@ -119,6 +121,8 @@ window.addEventListener("load", function() {
             htmlSelect.options.add(option);
         });
 
+        currentUser.innerText = usuario;
+        htmlFile.value = "";
         spinner.style.display = "none";
         main.style.display = "flex";
 
@@ -138,10 +142,7 @@ window.addEventListener("load", function() {
             if (responseJson && responseJson.status === 449) {
                 appinit();
             } else if (responseJson && responseJson.listas) {
-                /** @type {HTMLParagraphElement} */
-                const currentUser = document.querySelector("#currentUser");
-                currentUser.innerText = responseJson.SYSUSERID;
-                createSelectListas(responseJson.listas);
+                createSelectListas(responseJson.listas, responseJson.SYSUSERID);
             }
         });
     }
