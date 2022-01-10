@@ -1,4 +1,4 @@
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
     let sasjs = new SASjs.default({
         appLoc: "/Public/app/ICL",
         serverType: "SASVIYA",
@@ -129,8 +129,8 @@ window.addEventListener("load", function() {
         htmlSelect.addEventListener("change", getdata);
     }
 
-    function appinit() {
-        sasjs.request("services/common/appinit", null).then((res) => {
+    async function appinit() {
+        await sasjs.request("services/common/appinit", null).then((res) => {
             let responseJson;
 
             try {
@@ -147,75 +147,38 @@ window.addEventListener("load", function() {
         });
     }
 
-    sasjs.checkSession().then((res) => {
-        if (res.isLoggedIn) {
-            appinit();
-        }
-    })
-
-    function updatedata(dataObject) {
-        sasjs.request("services/common/updatedata", dataObject).then((res) => {
-            let responseJson;
-
-            try {
-                responseJson = res;
-            } catch (e) {
-                console.error(e);
-            }
-
-            if (responseJson && responseJson.status === 449) {
-                updatedata();
-            } else if (responseJson && responseJson.listas) {
-                console.log("Sucesso!");
-            }
-        });
-    }
-
     function filePromise(file) {
         const reader = new FileReader();
 
         return new Promise((resolve) => {
-          reader.onload = () => {
-            resolve(reader.result);
-          };
+            reader.onload = () => {
+                resolve(reader.result);
+            };
 
-          reader.readAsText(file);
+            reader.readAsText(file);
         });
     }
 
-    async function convertCsv() {
-        /** @type {HTMLButtonElement} */
-        const htmlButton = document.querySelector("#tablebutton");
+    async function uploadData() {
         /** @type {HTMLInputElement} */
         const htmlFile = document.querySelector("#tablefile");
         /** @type {HTMLSelectElement} */
         const htmlSelect = document.querySelector("#tableselect");
 
-        htmlButton.disabled = true;
-        htmlFile.disabled = true;
+        const myFile = htmlFile.files[0];
+        const MaxFileSize = 5 * 1024 * 1024;
+        //const selectedTable = String(htmlSelect.options[htmlSelect.selectedIndex].value);
 
-        const val = String(htmlSelect.options[htmlSelect.selectedIndex].value);
-
-        let dataObject = {}
-        dataObject[val] = []
-
-        const str = await filePromise(htmlFile.files[0]);
-
-        const linhas = str.split("\n");
-        const colunas = linhas[0].trim().toUpperCase().split("|");
-
-        for (let i = 1; i < linhas.length; i++) {
-            let temp = {};
-
-            for (let j = 0; j < colunas.length; j++) {
-                temp[colunas[j]] = linhas[i].trim().split("|")[j];
-            }
-
-            dataObject[val].push(temp);
+        if (myFile.size <= MaxFileSize) {
+            await sasjs.uploadFile('services/common/updatedata', [{ file: myFile, fileName: myFile.name }]);
         }
 
-        updatedata(dataObject);
+        //const str = await filePromise(htmlFile.files[0]);
     }
 
-    document.querySelector("#tablebutton").addEventListener("click", convertCsv);
-})
+    sasjs.checkSession().then((res) => {
+        if (res.isLoggedIn) {
+            appinit();
+        }
+    });
+});

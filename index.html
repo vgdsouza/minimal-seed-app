@@ -1,51 +1,55 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=edge" />
-        <link rel="shortcut icon" href="assets/img/favicon.ico" />
-        <!-- CSS -->
-        <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="assets/css/index.css" />
-    </head>
-    <body id="body">
-        <!-- Nav -->
-        <nav id="nav" class="myflex">
-            <img src="assets/img/bancopan.svg" />
-            <p id="currentUser"></p>
-        </nav>
-        <!-- Main -->
-        <div id="spinner" class="myflex">
-            <div class="spinner-border"></div>
-            <strong>Carregando...</strong>
-        </div>
-        <div id="main" class="myflex">
-            <h5>Selecione uma lista para ser visualizada e um arquivo .csv para atualizá-la.</h5>
-            <div id="tablecontrol">
-                <select id="tableselect" class="form-select tablecontrol">
-                    <option selected value="">Selecione uma lista</option>
-                </select>
-                <div class="input-group tablecontrol">
-                    <input type="file" id="tablefile" class="form-control" disabled />
-                    <button type="button" id="tablebutton" class="btn btn-success" disabled>Atualizar</button>
-                </div>
-            </div>
-            <hr>
-            <div id="tableview">
-                <table class="table">
-                    <thead>
-                        <tr id="thead"></tr>
-                    </thead>
-                    <tbody id="tbody"></tbody>
-                </table>
+
+<head>
+    <meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="assets/img/favicon.ico" />
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/index.css" />
+</head>
+
+<body id="body">
+    <!-- Nav -->
+    <nav id="nav" class="myflex">
+        <img src="assets/img/bancopan.svg" />
+        <p id="currentUser"></p>
+    </nav>
+    <!-- Main -->
+    <div id="spinner" class="myflex">
+        <div class="spinner-border"></div>
+        <strong>Carregando...</strong>
+    </div>
+    <div id="main" class="myflex">
+        <h5>Selecione uma lista para ser visualizada e um arquivo .csv para atualizá-la.</h5>
+        <div id="tablecontrol">
+            <select id="tableselect" class="form-select tablecontrol">
+                <option selected value="">Selecione uma lista</option>
+            </select>
+            <div class="input-group tablecontrol">
+                <input type="file" id="tablefile" class="form-control" disabled />
+                <button type="button" id="tablebutton" class="btn btn-success" disabled>Atualizar</button>
             </div>
         </div>
-        <!-- Footer -->
-        <footer id="footer" class="myflex">
-            <p>Banco PAN S.A. (“PAN”), instituição financeira, inscrita sob o CNPJ nº 59.285.411/0001-13, com sede na Avenida Paulista, nº 1.374, 16º andar, Bela Vista, São Paulo – SP.</p>
-        </footer>
-        <!-- JavaScript -->
-        <script src="assets/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/js/mysasjs.js"></script>
-        <script src="assets/js/index.js"></script>
-    </body>
+        <hr>
+        <div id="tableview">
+            <table class="table">
+                <thead>
+                    <tr id="thead"></tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer id="footer" class="myflex">
+        <p>Banco PAN S.A. (“PAN”), instituição financeira, inscrita sob o CNPJ nº 59.285.411/0001-13, com sede na
+            Avenida Paulista, nº 1.374, 16º andar, Bela Vista, São Paulo – SP.</p>
+    </footer>
+    <!-- JavaScript -->
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/sasjs.js"></script>
+    <script src="assets/js/index.js"></script>
+</body>
+
 </html>
