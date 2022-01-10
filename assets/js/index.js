@@ -3,7 +3,7 @@ window.addEventListener("load", function () {
         appLoc: "/Public/app/ICL",
         serverType: "SASVIYA",
         serverUrl: "",
-        debug: false,
+        debug: true,
         loginMechanism: "Redirected"
     });
 
@@ -58,7 +58,7 @@ window.addEventListener("load", function () {
         }
     }
 
-    function getdata() {
+    async function getdata() {
         /** @type {HTMLSelectElement} */
         const htmlSelect = document.querySelector("#tableselect");
         /** @type {HTMLInputElement} */
@@ -79,7 +79,7 @@ window.addEventListener("load", function () {
                 [val]: [{}]
             }
 
-            sasjs.request("services/common/getdata", dataObject).then((res) => {
+            await sasjs.request("services/common/getdata", dataObject).then((res) => {
                 let responseJson;
 
                 try {
@@ -159,7 +159,7 @@ window.addEventListener("load", function () {
         });
     }
 
-    async function uploadData() {
+    async function updatedata() {
         /** @type {HTMLInputElement} */
         const htmlFile = document.querySelector("#tablefile");
         /** @type {HTMLSelectElement} */
@@ -175,6 +175,8 @@ window.addEventListener("load", function () {
 
         //const str = await filePromise(htmlFile.files[0]);
     }
+
+    document.querySelector("#tablebutton").addEventListener("click", updatedata);
 
     sasjs.checkSession().then((res) => {
         if (res.isLoggedIn) {
