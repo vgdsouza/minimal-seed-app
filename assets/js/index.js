@@ -165,15 +165,45 @@ window.addEventListener("load", function () {
         /** @type {HTMLSelectElement} */
         const htmlSelect = document.querySelector("#tableselect");
 
-        const myFile = htmlFile.files[0];
-        const MaxFileSize = 5 * 1024 * 1024;
-        //const selectedTable = String(htmlSelect.options[htmlSelect.selectedIndex].value);
+        /** @type {String} */
+        const str = await filePromise(htmlFile.files[0]);
 
-        if (myFile.size <= MaxFileSize) {
-            await sasjs.uploadFile('services/common/updatedata', [{ file: myFile, fileName: myFile.name }]);
+        /** @type {Array} */
+        const linhas = str.split("\n");
+        /** @type {Array} */
+        const colunas = linhas[0].trim().split("|");
+
+        let dataObject = {
+            "fromjs": []
+        };
+
+        let temp;
+        let linha;
+
+        for (let i = 1; i < linhas.length; i++) {
+            temp = {};
+            linha = linhas[i].trim().split("|");
+            for (let j = 0; j < colunas.length; j++) {
+                temp[colunas[j]] = linha[j];
+            }
+            dataObject["fromjs"].push(temp);
         }
 
-        //const str = await filePromise(htmlFile.files[0]);
+        await sasjs.request("services/common/updatedata", dataObject).then((res) => {
+            let responseJson;
+
+            try {
+                responseJson = res;
+            } catch (e) {
+                console.error(e);
+            }
+
+            if (responseJson && responseJson.status === 449) {
+                updatedata();
+            } else if (responseJson) {
+                console.log("Sucesso");
+            }
+        });
     }
 
     document.querySelector("#tablebutton").addEventListener("click", updatedata);
