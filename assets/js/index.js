@@ -65,6 +65,8 @@ window.addEventListener("load", function () {
         const htmlFile = document.querySelector("#tablefile");
         /** @type {HTMLButtonElement} */
         const htmlButton = document.querySelector("#tablebutton");
+        /** @type {HTMLDivElement} */
+        const spinner2 = document.querySelector("#spinner2");
 
         clearTable();
 
@@ -74,10 +76,13 @@ window.addEventListener("load", function () {
             htmlButton.disabled = true;
             htmlFile.disabled = true;
             htmlFile.value = "";
+            spinner2.style.display = "none";
         } else {
             const dataObject = {
                 [val]: [{}]
             }
+
+            spinner2.style.display = "block";
 
             await sasjs.request("services/common/getdata", dataObject).then((res) => {
                 let responseJson;
@@ -91,6 +96,7 @@ window.addEventListener("load", function () {
                 if (responseJson && responseJson.status === 449) {
                     getdata();
                 } else if (responseJson) {
+                    spinner2.style.display = "none";
                     createTableView(responseJson.lista);
                 }
             });
@@ -129,6 +135,9 @@ window.addEventListener("load", function () {
         htmlSelect.addEventListener("change", getdata);
     }
 
+    const htmlSelect = document.querySelector("#tableselect");
+    htmlSelect.addEventListener("change", getdata);
+
     async function appinit() {
         await sasjs.request("services/common/appinit", null).then((res) => {
             let responseJson;
@@ -162,8 +171,11 @@ window.addEventListener("load", function () {
     async function updatedata() {
         /** @type {HTMLInputElement} */
         const htmlFile = document.querySelector("#tablefile");
-        /** @type {HTMLSelectElement} */
-        const htmlSelect = document.querySelector("#tableselect");
+        /** @type {HTMLButtonElement} */
+        const htmlButton = document.querySelector("#tablebutton");
+
+        htmlFile.disabled = true;
+        htmlButton.disabled = true;
 
         /** @type {String} */
         const str = await filePromise(htmlFile.files[0]);
