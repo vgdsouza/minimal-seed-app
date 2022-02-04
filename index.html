@@ -13,14 +13,37 @@
     <!-- Nav -->
     <nav id="nav" class="myflex">
         <img src="assets/img/bancopan.svg" />
-        <p id="currentUser"></p>
+        <p id="currentUser">visouz</p>
     </nav>
-    <!-- Main -->
+    <!-- Nav End -->
+
+
+    <!-- Spinner -->
     <div id="spinner" class="myflex">
         <div class="spinner-border"></div>
         <strong>Carregando...</strong>
     </div>
+    <!-- Spinner End -->
+
+
+    <!-- Main -->
     <div id="main" class="myflex">
+        <!-- Menu -->
+        <div id="menu" class="myflex">
+            <button type="button" id="verLista" class="btn btn-primary">VER LISTAS</button>
+            <button type="button" id="carregarLista" class="btn btn-primary">ATUALIZAR LISTA</button>
+            <button type="button" id="criarLista" class="btn btn-primary">CRIAR NOVA LISTA</button>
+        </div>
+        <!-- Menu End -->
+        <div id="tablecontrol">
+            <select id="tableselect" class="form-select tablecontrol">
+                <option selected value="">Selecione uma lista</option>
+            </select>
+        </div>
+        <hr>
+        <!-- Ver Listas -->
+        <!-- Ver Listas End -->
+        <!--
         <h5>Selecione uma lista para ser visualizada e um arquivo .csv para atualizá-la.</h5>
         <div id="tablecontrol">
             <select id="tableselect" class="form-select tablecontrol">
@@ -45,6 +68,7 @@
                 <tbody id="tbody"></tbody>
             </table>
         </div>
+        -->
     </div>
     <!-- Footer -->
     <footer id="footer" class="myflex">

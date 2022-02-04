@@ -1,11 +1,5 @@
 window.addEventListener("load", function () {
-    let sasjs = new SASjs.default({
-        appLoc: "/Public/app/ICL",
-        serverType: "SASVIYA",
-        serverUrl: "",
-        debug: true,
-        loginMechanism: "Redirected"
-    });
+
 
     function clearTable() {
         /** @type {HTMLTableRowElement} */
@@ -107,54 +101,12 @@ window.addEventListener("load", function () {
         }
     }
 
-    function createSelectListas(listas, usuario) {
-        /** @type {HTMLSelectElement} */
-        const htmlSelect = document.querySelector("#tableselect");
-        /** @type {HTMLDivElement} */
-        const spinner = document.querySelector("#spinner");
-        /** @type {HTMLDivElement} */
-        const main = document.querySelector("#main");
-        /** @type {HTMLParagraphElement} */
-        const currentUser = document.querySelector("#currentUser");
-        /** @type {HTMLInputElement} */
-        const htmlFile = document.querySelector("#tablefile");
 
-        listas.forEach((lista) => {
-            /** @type {HTMLOptionElement} */
-            const option = new Option();
-            option.value = lista['TABLE_REFERENCE'];
-            option.text = lista['LIST_NAME'];
-            htmlSelect.options.add(option);
-        });
-
-        currentUser.innerText = usuario;
-        htmlFile.value = "";
-        spinner.style.display = "none";
-        main.style.display = "flex";
-
-        htmlSelect.addEventListener("change", getdata);
-    }
 
     const htmlSelect = document.querySelector("#tableselect");
     htmlSelect.addEventListener("change", getdata);
 
-    async function appinit() {
-        await sasjs.request("services/common/appinit", null).then((res) => {
-            let responseJson;
 
-            try {
-                responseJson = res;
-            } catch (e) {
-                console.error(e);
-            }
-
-            if (responseJson && responseJson.status === 449) {
-                appinit();
-            } else if (responseJson && responseJson.listas) {
-                createSelectListas(responseJson.listas, responseJson.SYSUSERID);
-            }
-        });
-    }
 
     function filePromise(file) {
         const reader = new FileReader();
@@ -220,9 +172,5 @@ window.addEventListener("load", function () {
 
     document.querySelector("#tablebutton").addEventListener("click", updatedata);
 
-    sasjs.checkSession().then((res) => {
-        if (res.isLoggedIn) {
-            appinit();
-        }
-    });
+
 });
