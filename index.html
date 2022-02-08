@@ -1,84 +1,92 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="shortcut icon" href="assets/img/favicon.ico" />
-    <!-- CSS -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="assets/css/index.css" />
-</head>
-
-<body id="body">
-    <!-- Nav -->
-    <nav id="nav" class="myflex">
-        <img src="assets/img/bancopan.svg" />
-        <p id="currentUser">visouz</p>
-    </nav>
-    <!-- Nav End -->
+    <!-- Head -->
+    <head>
+        <meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=edge" />
+        <link rel="shortcut icon" href="assets/img/favicon.ico" />
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="assets/css/index.css" />
+    </head>
+    <!-- Head End -->
 
 
-    <!-- Spinner -->
-    <div id="spinner" class="myflex">
-        <div class="spinner-border"></div>
-        <strong>Carregando...</strong>
-    </div>
-    <!-- Spinner End -->
+    <!-- Body -->
+    <body id="body">
+        <!-- Nav -->
+        <nav id="nav" class="myflex">
+            <img src="assets/img/bancopan.svg" />
+            <p id="currentUser"></p>
+        </nav>
+        <!-- Nav End -->
 
 
-    <!-- Main -->
-    <div id="main" class="myflex">
-        <!-- Menu -->
-        <div id="menu" class="myflex">
-            <button type="button" id="verLista" class="btn btn-primary">VER LISTAS</button>
-            <button type="button" id="carregarLista" class="btn btn-primary">ATUALIZAR LISTA</button>
-            <button type="button" id="criarLista" class="btn btn-primary">CRIAR NOVA LISTA</button>
+        <!-- Spinner -->
+        <div id="spinner" class="myflex">
+            <div class="spinner-border"></div>
+            <strong>Carregando...</strong>
         </div>
-        <!-- Menu End -->
-        <div id="tablecontrol">
-            <select id="tableselect" class="form-select tablecontrol">
-                <option selected value="">Selecione uma lista</option>
-            </select>
-        </div>
-        <hr>
-        <!-- Ver Listas -->
-        <!-- Ver Listas End -->
-        <!--
-        <h5>Selecione uma lista para ser visualizada e um arquivo .csv para atualizá-la.</h5>
-        <div id="tablecontrol">
-            <select id="tableselect" class="form-select tablecontrol">
-                <option selected value="">Selecione uma lista</option>
-                <option value="1">Foo</option>
-            </select>
-            <div class="input-group tablecontrol">
-                <input type="file" id="tablefile" class="form-control" disabled />
-                <button type="button" id="tablebutton" class="btn btn-success" disabled>Atualizar</button>
+        <!-- Spinner End -->
+
+
+        <!-- Main -->
+        <div id="main" class="myflex">
+            <!-- Menu -->
+            <div id="menu" class="myflex">
+                <button type="button" id="verLista" class="btn btn-primary">VER LISTAS</button>
+                <button type="button" id="carregarLista" class="btn btn-primary">ATUALIZAR LISTA</button>
+                <button type="button" id="criarLista" class="btn btn-primary">CRIAR NOVA LISTA</button>
             </div>
-        </div>
-        <hr>
-        <div id="tableview">
-            <div id="spinner2" class="myflex">
-                <div class="spinner-border"></div>
-                <strong>Carregando...</strong>
-            </div>
-            <table class="table">
-                <thead>
-                    <tr id="thead"></tr>
-                </thead>
-                <tbody id="tbody"></tbody>
-            </table>
-        </div>
-        -->
-    </div>
-    <!-- Footer -->
-    <footer id="footer" class="myflex">
-        <p>Banco PAN S.A. (“PAN”), instituição financeira, inscrita sob o CNPJ nº 59.285.411/0001-13, com sede na
-            Avenida Paulista, nº 1.374, 16º andar, Bela Vista, São Paulo – SP.</p>
-    </footer>
-    <!-- JavaScript -->
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/sasjs.js"></script>
-    <script src="assets/js/index.js"></script>
-</body>
+            <!-- Menu End -->
 
+
+            <!--
+            <h5>Selecione uma lista para ser visualizada e um arquivo .csv para atualizá-la.</h5>
+            <div id="tablecontrol">
+                <select id="tableselect" class="form-select tablecontrol">
+                    <option selected value="">Selecione uma lista</option>
+                    <option value="1">Foo</option>
+                </select>
+                <div class="input-group tablecontrol">
+                    <input type="file" id="tablefile" class="form-control" disabled />
+                    <button type="button" id="tablebutton" class="btn btn-success" disabled>Atualizar</button>
+                </div>
+            </div>
+            <hr>
+            <div id="tableview">
+                <div id="spinner2" class="myflex">
+                    <div class="spinner-border"></div>
+                    <strong>Carregando...</strong>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr id="thead"></tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            -->
+        </div>
+        <!-- Main End -->
+
+
+        <!-- Footer -->
+        <footer id="footer" class="myflex">
+            <p>Banco PAN S.A. (“PAN”), instituição financeira, inscrita sob o CNPJ nº 59.285.411/0001-13, com sede na
+                Avenida Paulista, nº 1.374, 16º andar, Bela Vista, São Paulo – SP.</p>
+        </footer>
+        <!-- Footer End -->
+
+
+        <!-- JavaScript -->
+        <script src="assets/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/sasjs.js"></script>
+        <!-- JavaScript End -->
+
+
+        <!-- Jobs -->
+        <script src="assets/js/jobs/appinit.js"></script>
+        <script src="assets/js/jobs/getdata.js"></script>
+        <!-- Jobs End -->
+    </body>
+    <!-- Body End -->
 </html>

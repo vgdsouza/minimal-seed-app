@@ -13,7 +13,14 @@
   background-color: #f5f5f5;
 }
 
-.spinner {
+#spinner {
+  width: 21ch;
+  justify-content: space-between;
+  color: #414141;
+  display: none;
+}
+
+#tablespinner {
   width: 21ch;
   justify-content: space-between;
   color: #414141;
@@ -29,6 +36,10 @@
 
 #menu {
   flex-direction: column;
+}
+
+#menu:first-child {
+  margin-top: 0;
 }
 
 #menu button {

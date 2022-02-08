@@ -24,7 +24,7 @@ window.addEventListener("load", function () {
         }
     });
 
-    async function appinit(userName) {
+    async function appinit() {
         await sasjs.request("services/common/appinit", null).then((res) => {
             let responseJson;
 
