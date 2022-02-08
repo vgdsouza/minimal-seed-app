@@ -1,17 +1,12 @@
 <!DOCTYPE html>
 <html>
-    <!-- Head -->
     <head>
         <meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=edge" />
         <link rel="shortcut icon" href="assets/img/favicon.ico" />
         <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
         <link rel="stylesheet" href="assets/css/index.css" />
     </head>
-    <!-- Head End -->
-
-
-    <!-- Body -->
-    <body id="body">
+    <body id="body" class="myflex">
         <!-- Nav -->
         <nav id="nav" class="myflex">
             <img src="assets/img/bancopan.svg" />
@@ -30,33 +25,13 @@
 
         <!-- Main -->
         <div id="main" class="myflex">
-            <!-- Menu -->
-            <div id="menu" class="myflex">
-                <button type="button" id="verLista" class="btn btn-primary">VER LISTAS</button>
-                <button type="button" id="carregarLista" class="btn btn-primary">ATUALIZAR LISTA</button>
-                <button type="button" id="criarLista" class="btn btn-primary">CRIAR NOVA LISTA</button>
-            </div>
-            <!-- Menu End -->
-
-
-            <!--
-            <h5>Selecione uma lista para ser visualizada e um arquivo .csv para atualizá-la.</h5>
-            <div id="tablecontrol">
-                <select id="tableselect" class="form-select tablecontrol">
+            <div id="tablecontrol" class="myflex">
+                <select id="tableselect" class="form-select">
                     <option selected value="">Selecione uma lista</option>
-                    <option value="1">Foo</option>
                 </select>
-                <div class="input-group tablecontrol">
-                    <input type="file" id="tablefile" class="form-control" disabled />
-                    <button type="button" id="tablebutton" class="btn btn-success" disabled>Atualizar</button>
-                </div>
             </div>
             <hr>
-            <div id="tableview">
-                <div id="spinner2" class="myflex">
-                    <div class="spinner-border"></div>
-                    <strong>Carregando...</strong>
-                </div>
+            <div id="tableview" class="myflex">
                 <table class="table">
                     <thead>
                         <tr id="thead"></tr>
@@ -64,7 +39,6 @@
                     <tbody id="tbody"></tbody>
                 </table>
             </div>
-            -->
         </div>
         <!-- Main End -->
 
@@ -88,5 +62,4 @@
         <script src="assets/js/jobs/getdata.js"></script>
         <!-- Jobs End -->
     </body>
-    <!-- Body End -->
 </html>
