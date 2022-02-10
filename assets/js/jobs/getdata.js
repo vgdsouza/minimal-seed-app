@@ -2,31 +2,26 @@
 window.addEventListener("load", function () {
     /** @type {HTMLSelectElement} */
     const tableselect = document.querySelector("#tableselect");
+
     tableselect.addEventListener("change", getdata);
 
     async function getdata() {
-        /** @type {HTMLInputElement} */
-        const tablefile = document.querySelector("#tablefile");
-        /** @type {HTMLButtonElement} */
-        const tablebutton = document.querySelector("#tablebutton");
+        /** @type {HTMLTableElement} */
+        const mytable = document.querySelector("#mytable");
         /** @type {HTMLDivElement} */
         const tablespinner = document.querySelector("#tablespinner");
 
+        mytable.style.display = "none";
+        tablespinner.style.display = "";
+
         clearTable();
 
-        const val = String(htmlSelect.options[htmlSelect.selectedIndex].value);
+        const val = String(tableselect.options[tableselect.selectedIndex].value);
 
-        if (val === "") {
-            tablebutton.disabled = true;
-            tablefile.disabled = true;
-            tablefile.value = "";
-            tablespinner.style.display = "none";
-        } else {
+        if (!(val === "")) {
             const dataObject = {
                 [val]: [{}]
             }
-
-            tablespinner.style.display = "block";
 
             await sasjs.request("services/common/getdata", dataObject).then((res) => {
                 let responseJson;
@@ -40,15 +35,14 @@ window.addEventListener("load", function () {
                 if (responseJson && responseJson.status === 449) {
                     getdata();
                 } else if (responseJson) {
-                    tablespinner.style.display = "none";
                     createTableView(responseJson.lista);
                 }
             });
 
-            tablebutton.disabled = false;
-            tablefile.disabled = false;
-            tablefile.value = "";
         }
+
+        tablespinner.style.display = "none";
+        mytable.style.display = "";
     }
 
     function clearTable() {
@@ -73,7 +67,7 @@ window.addEventListener("load", function () {
 
     function createTableView(lista) {
         /** @type {HTMLTableRowElement} */
-        const theadrow = document.querySelector("#thead");
+        const thead = document.querySelector("#thead");
         /** @type {HTMLTableSectionElement} */
         const tbody = document.querySelector("#tbody");
 
@@ -85,7 +79,7 @@ window.addEventListener("load", function () {
                 const th = document.createElement("th");
                 th.scope = "col";
                 th.innerText = col;
-                theadrow.appendChild(th);
+                thead.appendChild(th);
             });
 
             lista.forEach((linha) => {

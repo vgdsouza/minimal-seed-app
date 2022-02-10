@@ -29,10 +29,18 @@
                 <select id="tableselect" class="form-select">
                     <option selected value="">Selecione uma lista</option>
                 </select>
+                <div class="input-group">
+                    <input type="file" id="tablefile" class="form-control">
+                    <button type="button" id="tablebutton" class="btn btn-primary">ENVIAR</button>
+                </div>
             </div>
             <hr>
             <div id="tableview" class="myflex">
-                <table class="table">
+                <div id="tablespinner" class="myflex">
+                    <div class="spinner-border"></div>
+                    <strong>Carregando...</strong>
+                </div>
+                <table id="mytable" class="table table-hover">
                     <thead>
                         <tr id="thead"></tr>
                     </thead>
@@ -60,6 +68,7 @@
         <!-- Jobs -->
         <script src="assets/js/jobs/appinit.js"></script>
         <script src="assets/js/jobs/getdata.js"></script>
+        <script src="assets/js/jobs/updatedata.js"></script>
         <!-- Jobs End -->
     </body>
 </html>

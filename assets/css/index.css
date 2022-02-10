@@ -25,12 +25,17 @@
 }
 
 #tablecontrol {
-  justify-content: center;
+  justify-content: space-evenly;
   margin-top: 1rem;
   padding: 0;
 }
 
 #tableselect {
+  width: 100%;
+  max-width: 720px;
+}
+
+#tablecontrol > div {
   width: 100%;
   max-width: 720px;
 }
@@ -43,6 +48,16 @@
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
   overflow: scroll;
+}
+
+#tablespinner {
+  width: 21ch;
+  color: #414141;
+  display: none;
+}
+
+#mytable {
+  display: none;
 }
 
 #footer {
