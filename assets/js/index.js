@@ -90,7 +90,9 @@ window.addEventListener("load", function () {
 
         const val = String(tableselect.options[tableselect.selectedIndex].value);
 
-        if (!(val === "")) {
+        if (val === "") {
+            tablefile.disabled = true;
+        } else {
             const dataObject = {
                 [val]: [{}]
             }
@@ -114,7 +116,7 @@ window.addEventListener("load", function () {
         }
 
         tablespinner.style.display = "";  // No CSS está definido como None
-        mytable.style.display = "flex";
+        mytable.style.display = "table";
         tablefile.value = "";
         tablefile.disabled = false;
     }
@@ -174,15 +176,18 @@ window.addEventListener("load", function () {
     async function updatedata() {
         tablefile.disabled = true;
         tablebutton.disabled = true;
+        tablebutton.click();
 
         /** @type {File} */
         const myfile = tablefile.files[0];
+
+        const val = String(tableselect.options[tableselect.selectedIndex].value);
 
         if (myfile) {
             await sasjs.uploadFile(
                 'services/common/updatedata',
                 [{ "file": myfile, "fileName": myfile.name }],
-                {"table": "This is a test"}
+                {"tableRef": val}
             ).then((res) => {
                 let responseJson;
 

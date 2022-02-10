@@ -42,7 +42,6 @@
 
 #tableview {
   flex-direction: column;
-  justify-content: center;
   padding: 0;
   flex-grow: 1;
   border: 1px solid #ced4da;
@@ -51,10 +50,10 @@
 }
 
 #tablespinner {
+  display: none;
   width: 21ch;
   height: 100%;
   color: #414141;
-  display: none;
 }
 
 #mytable {
