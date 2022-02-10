@@ -14,10 +14,10 @@
 #spinner {
   width: 21ch;
   color: #414141;
-  display: none;
 }
 
 #main {
+  display: none;
   flex-direction: column;
   justify-content: flex-start;
   flex-grow: 1;

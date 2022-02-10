@@ -16,7 +16,24 @@ window.addEventListener("load", function () {
         const myfile = tablefile.files[0];
 
         if (myfile) {
-            await sasjs.uploadFile('services/common/updatedata', [{ "file": myfile, "fileName": myfile.name }]);
+            await sasjs.uploadFile(
+                'services/common/updatedata',
+                [{ "file": myfile, "fileName": myfile.name }]
+            ).then((res) => {
+                let responseJson;
+
+                try {
+                    responseJson = res;
+                } catch (e) {
+                    console.error(e);
+                }
+
+                if (responseJson && responseJson.status === 449) {
+                    getdata();
+                } else if (responseJson) {
+                    console.log(responseJson);
+                }
+            });
         }
     }
 });

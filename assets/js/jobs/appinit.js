@@ -1,15 +1,13 @@
-/* Declarando a variável sasjs como um global para que ela possa ser acessada
-a partir dos outros arquivos */
-let sasjs = new SASjs.default({
-    appLoc: "/Public/app/ICL",
-    serverType: "SASVIYA",
-    serverUrl: "",
-    debug: true,
-    loginMechanism: "Redirected"
-});
-
 /* window.onload para garantir que todo o HTML já foi carregado */
 window.addEventListener("load", function () {
+    var sasjs = new SASjs.default({
+        appLoc: "/Public/app/ICL",
+        serverType: "SASVIYA",
+        serverUrl: "",
+        debug: true,
+        loginMechanism: "Redirected"
+    });
+
     /* verificamos se o usuário está logado, em caso positivo executamos o
     job appinit para criar o select com o nome de todas as listas cadastradas
     na tabela de controle */
@@ -62,6 +60,6 @@ window.addEventListener("load", function () {
 
         tablefile.value = "";
         spinner.style.display = "none";
-        main.style.display = "flex";
+        main.style.display = "";
     }
 });
