@@ -16,7 +16,7 @@ window.addEventListener("load", function () {
             /** @type {HTMLParagraphElement} */
             const currentUser = document.querySelector("#currentUser");
 
-            currentUser.innerText = userName;
+            currentUser.innerText = res.userName;
 
             appinit();
         }
@@ -60,6 +60,6 @@ window.addEventListener("load", function () {
 
         tablefile.value = "";
         spinner.style.display = "none";
-        main.style.display = "";
+        main.style.display = "flex";
     }
 });

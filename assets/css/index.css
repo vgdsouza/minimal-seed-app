@@ -52,6 +52,7 @@
 
 #tablespinner {
   width: 21ch;
+  height: 100%;
   color: #414141;
   display: none;
 }
