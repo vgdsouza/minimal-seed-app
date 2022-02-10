@@ -18,7 +18,8 @@ window.addEventListener("load", function () {
         if (myfile) {
             await sasjs.uploadFile(
                 'services/common/updatedata',
-                [{ "file": myfile, "fileName": myfile.name }]
+                [{ "file": myfile, "fileName": myfile.name }],
+                {"table": "This is a test"}
             ).then((res) => {
                 let responseJson;
 
