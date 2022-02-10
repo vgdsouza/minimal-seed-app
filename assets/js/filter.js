@@ -21,11 +21,11 @@ window.addEventListener("load", function () {
 
         textoBusca = tratamentoTextual(tablefilterinput.value);
 
-        tbody.childNodes.forEach((linha) => {
+        for (let linha of tbody.childNodes) {
             linhaAtual = linha;
             buscaEncontrada = false;
 
-            linhaAtual.childNodes.forEach((celula) => {
+            for (let celula of linhaAtual.childNodes) {
                 celulaAtual = celula;
                 textoCelula = tratamentoTextual(celulaAtual.innerText);
 
@@ -33,14 +33,14 @@ window.addEventListener("load", function () {
                     buscaEncontrada = true;
                     break;
                 }
-            });
+            }
 
             if (buscaEncontrada) {
                 linhaAtual.style.display = "";
             } else {
                 linhaAtual.style.display = "none";
             }
-        });
+        }
     }
 
     function tratamentoTextual(texto) {
