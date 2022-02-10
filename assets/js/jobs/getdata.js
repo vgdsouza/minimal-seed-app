@@ -10,6 +10,10 @@ window.addEventListener("load", function () {
         const mytable = document.querySelector("#mytable");
         /** @type {HTMLDivElement} */
         const tablespinner = document.querySelector("#tablespinner");
+        /** @type {HTMLButtonElement} */
+        const tablebutton = document.querySelector("#tablebutton");
+        /** @type {HTMLInputElement} */
+        const tablefile = document.querySelector("#tablefile")
 
         mytable.style.display = "";  // No CSS está definido como None
         tablespinner.style.display = "flex";
@@ -43,6 +47,8 @@ window.addEventListener("load", function () {
 
         tablespinner.style.display = "";  // No CSS está definido como None
         mytable.style.display = "flex";
+        tablefile.value = "";
+        tablefile.disabled = false;
     }
 
     function clearTable() {
