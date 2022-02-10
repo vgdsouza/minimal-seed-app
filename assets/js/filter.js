@@ -5,7 +5,7 @@ window.addEventListener("load", function () {
     /** @type {HTMLTableSectionElement} */
     const tbody = document.querySelector("#tbody");
 
-    tablefilterinput.addEventListener("change", filtraTabela);
+    tablefilterinput.addEventListener("keyup", filtraTabela);
 
     function filtraTabela() {
         /** @type {String} */

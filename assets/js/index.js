@@ -176,7 +176,6 @@ window.addEventListener("load", function () {
     async function updatedata() {
         tablefile.disabled = true;
         tablebutton.disabled = true;
-        tablebutton.click();
 
         /** @type {File} */
         const myfile = tablefile.files[0];
@@ -187,7 +186,7 @@ window.addEventListener("load", function () {
             await sasjs.uploadFile(
                 'services/common/updatedata',
                 [{ "file": myfile, "fileName": myfile.name }],
-                {"tableRef": val}
+                { "tableRef": val }
             ).then((res) => {
                 let responseJson;
 
@@ -207,3 +206,41 @@ window.addEventListener("load", function () {
     }
     /* UPDATEDATA END */
 });
+
+async function upload(file) {
+    const chunkSize = 5 * 1024 * 1024; //chunk size is 5MB
+
+    if (file) {
+        const numberOfChunks = Math.ceil(file.size / chunkSize);
+
+        for (let i = 0; i < numberOfChunks; i++) {
+            const chunkStart = chunkSize * i;
+            const chunkEnd = Math.min(chunkStart + chunkSize, file.size);
+            const chunk = file.slice(chunkStart, chunkEnd);
+            const newFile = new File([chunk], file.name, {"type": file.type, "lastModified": file.lastModified});
+
+            if (i === 0) {
+                await sasjs.uploadFile('services/common/upload', [{ file: newFile, fileName: file.name }], { "tableRef": val }).then(
+                    (res) => {
+                        if (res?.sasjsAbort) {
+                            const error = `MAC: ${res.sasjsAbort[0].MAC}\n MSG: ${res.sasjsAbort[0].MSG}`;
+                            console.error(error);
+                        }
+                    },
+                    (err) => {
+                        console.error(err);
+                    }
+                )
+            } else {
+                await sasjs.uploadFile('services/common/append', [{ file: newFile, fileName: file.name }], { "tableRef": val }).then(
+                    (res) => {
+                        console.log(res);
+                    },
+                    (err) => {
+                        console.error(err);
+                    }
+                )
+            }
+        }
+    }
+}
