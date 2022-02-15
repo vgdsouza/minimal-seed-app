@@ -1,5 +1,3 @@
-var MINHAS_LISTAS;
-
 window.addEventListener("load", function () {
     /** @type {HTMLParagraphElement} */
     const currentUser = document.querySelector("#currentUser");
@@ -19,52 +17,43 @@ window.addEventListener("load", function () {
         loginMechanism: "Redirected"
     });
 
-    if (!MOCK) {
-        sasjs.checkSession().then((res) => {
-            if (res.isLoggedIn) {
-                currentUser.innerText = res.userName;
-                appinit();
-            }
-        });
-    } else {
-        this.setTimeout(appinit, 1000);
-    }
+    sasjs.checkSession().then((res) => {
+        if (res.isLoggedIn) {
+            currentUser.innerText = res.userName;
+            appinit();
+        }
+    });
 
     /* APPINIT */
     async function appinit() {
-        if (!MOCK) {
-            await sasjs.request("services/common/appinit", null).then((res) => {
-                let responseJson;
+        await sasjs.request("services/common/appinit", null).then((res) => {
+            let responseJson;
 
-                try {
-                    responseJson = res;
-                } catch (e) {
-                    console.error(e);
-                }
+            try {
+                responseJson = res;
+            } catch (e) {
+                console.error(e);
+            }
 
-                if (responseJson && responseJson.status === 449) {
-                    appinit();
-                } else if (responseJson && responseJson.listas) {
-                    createSelectListas(responseJson.listas);
-                }
-            });
-        } else {
-            MINHAS_LISTAS = appinitJson.listas;
-            createTableListas(appinitJson.listas);
-        }
+            if (responseJson && responseJson.status === 449) {
+                appinit();
+            } else if (responseJson && responseJson.listas) {
+                createTableListas(responseJson.listas);
+            }
+        });
     }
 
-    function createTableListas(lists) {
-        lists.forEach((list) => {
+    function createTableListas(listas) {
+        listas.forEach((lista) => {
             const tr = document.createElement("tr");
             const td1 = document.createElement("td");
             const td2 = document.createElement("td");
             const td3 = document.createElement("td");
             const td4 = document.createElement("td");
-            td1.innerText = list['LIST_NAME'];
-            td2.innerHTML = `<button id=\"${list['TABLE_REFERENCE']}_VER\" value=\"${list['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/eye.svg\"></button>`;
-            td3.innerHTML = `<button id=\"${list['TABLE_REFERENCE']}_EDITAR\" value=\"${list['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/pen.svg\"></button>`;
-            td4.innerHTML = `<button id=\"${list['TABLE_REFERENCE']}_EXCLUIR\" value=\"${list['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/trash.svg\"></button>`;
+            td1.innerText = lista['LIST_NAME'];
+            td2.innerHTML = `<button id=\"${lista['TABLE_REFERENCE']}_VER\" value=\"${lista['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/eye.svg\"></button>`;
+            td3.innerHTML = `<button id=\"${lista['TABLE_REFERENCE']}_EDITAR\" value=\"${lista['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/pen.svg\"></button>`;
+            td4.innerHTML = `<button id=\"${lista['TABLE_REFERENCE']}_EXCLUIR\" value=\"${lista['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/trash.svg\"></button>`;
             td2.style.width = "0";
             td3.style.width = "0";
             td4.style.width = "0";
@@ -75,16 +64,17 @@ window.addEventListener("load", function () {
             tablebody.appendChild(tr);
         });
 
-        MINHAS_LISTAS.forEach((Lista) => {
-            const btnVer = document.querySelector(`#${Lista['TABLE_REFERENCE']}_VER`);
-            const btnEditar = document.querySelector(`#${Lista['TABLE_REFERENCE']}_EDITAR`);
-            const btnExcluir = document.querySelector(`#${Lista['TABLE_REFERENCE']}_EXCLUIR`);
+        listas.forEach((lista) => {
+            const btnVer = document.querySelector(`#${lista['TABLE_REFERENCE']}_VER`);
+            const btnEditar = document.querySelector(`#${lista['TABLE_REFERENCE']}_EDITAR`);
+            const btnExcluir = document.querySelector(`#${lista['TABLE_REFERENCE']}_EXCLUIR`);
             const btnVerVoltar = document.querySelector("#ver_lista button");
+            const btnEditarVoltar = document.querySelector("#editar_lista button");
 
             btnVer.addEventListener("click", function () {
                 spinner.style.display = "";
                 listas.style.display = "none";
-                document.querySelector("#ver_lista > div > span").innerText = Lista['LIST_NAME'];
+                document.querySelector("#ver_lista > div > span").innerText = lista['LIST_NAME'];
                 getdata(btnVer.value);
             });
 
@@ -96,7 +86,14 @@ window.addEventListener("load", function () {
             btnEditar.addEventListener("click", function () {
                 spinner.style.display = "";
                 listas.style.display = "none";
+                document.querySelector("#editar_lista > div > span").innerText = lista['LIST_NAME'];
+                renderUpdate(btnEditar.value);
             });
+
+            btnEditarVoltar.addEventListener("click", function () {
+                document.querySelector("#editar_lista").style.display = "none";
+                listas.style.display = "";
+            })
 
             btnExcluir.addEventListener("click", function () {
                 spinner.style.display = "";
@@ -116,31 +113,27 @@ window.addEventListener("load", function () {
             [value]: [{}]
         }
 
-        if (!MOCK) {
-            await sasjs.request("services/common/getdata", dataObject).then((res) => {
-                let responseJson;
+        await sasjs.request("services/common/getdata", dataObject).then((res) => {
+            let responseJson;
 
-                try {
-                    responseJson = res;
-                } catch (e) {
-                    console.error(e);
-                }
+            try {
+                responseJson = res;
+            } catch (e) {
+                console.error(e);
+            }
 
-                if (responseJson && responseJson.status === 449) {
-                    getdata();
-                } else if (responseJson) {
-                    createTableView(responseJson.lista);
-                }
-            });
-        } else {
-            setTimeout(createTableView, 1000, getdataJson.lista);
-        }
+            if (responseJson && responseJson.status === 449) {
+                getdata();
+            } else if (responseJson) {
+                createTableView(responseJson.lista);
+            }
+        });
     }
 
     function createTableView(lista) {
         const headers = document.querySelector("#ver_lista thead tr");
         const viewbody = document.querySelector("#ver_lista tbody");
-        const ver_lista = document.querySelector("#ver_lista")
+        const ver_lista = document.querySelector("#ver_lista");
 
         clearTable(headers, viewbody);
 
@@ -190,155 +183,39 @@ window.addEventListener("load", function () {
 
 
     /* UPDATEDATA */
-    /*tablefile.addEventListener("change", function () {
-        if (!(tablefile.value === "")) {
-            tablebutton.disabled = false;
-        }
-    });*/
+    function renderUpdate(value) {
+        const editar_lista = document.querySelector("#editar_lista");
+        const fileInput = document.querySelector("#editar_lista .input-group input");
+        const btnEnviar = document.querySelector("#editar_lista .input-group button");
 
-    //tablebutton.addEventListener("click", updatedata);
+        btnEnviar.addEventListener("click", function () {
+            updatedata(fileInput, value);
+        });
 
-    async function updatedata() {
-        tablefile.disabled = true;
-        tablebutton.disabled = true;
+        spinner.style.display = "none";
+        editar_lista.style.display = "";
+    }
 
-        /** @type {File} */
-        const myfile = tablefile.files[0];
-
-        const val = String(tableselect.options[tableselect.selectedIndex].value);
+    async function updatedata(input, value) {
+        const chunkSize = 5 * 1024 * 1024; //chunk size is 5MB
+        const myfile = input.files[0];
 
         if (myfile) {
-            await sasjs.uploadFile(
-                'services/common/updatedata',
-                [{ "file": myfile, "fileName": myfile.name }],
-                { "tableRef": val }
-            ).then((res) => {
-                let responseJson;
+            const numberOfChunks = Math.ceil(file.size / chunkSize);
 
-                try {
-                    responseJson = res;
-                } catch (e) {
-                    console.error(e);
-                }
+            for (let i = 0; i < numberOfChunks; i++) {
+                const chunkStart = chunkSize * i;
+                const chunkEnd = Math.min(chunkStart + chunkSize, file.size);
+                const chunk = file.slice(chunkStart, chunkEnd);
+                const newFile = new File([chunk], file.name, { "type": file.type, "lastModified": file.lastModified });
 
-                if (responseJson && responseJson.status === 449) {
-                    console.error(responseJson);
-                } else if (responseJson) {
-                    console.log(responseJson);
+                if (i === 0) {
+                    await sasjs.uploadFile('services/common/updatedata', [{ "file": newFile, "fileName": myfile.name }], { "tableRef": value });
+                } else {
+                    await sasjs.uploadFile('services/common/appenddata', [{ "file": newFile, "fileName": myfile.name }], { "tableRef": value });
                 }
-            });
+            }
         }
     }
     /* UPDATEDATA END */
 });
-
-async function upload(file) {
-    const chunkSize = 5 * 1024 * 1024; //chunk size is 5MB
-
-    if (file) {
-        const numberOfChunks = Math.ceil(file.size / chunkSize);
-
-        for (let i = 0; i < numberOfChunks; i++) {
-            const chunkStart = chunkSize * i;
-            const chunkEnd = Math.min(chunkStart + chunkSize, file.size);
-            const chunk = file.slice(chunkStart, chunkEnd);
-            const newFile = new File([chunk], file.name, { "type": file.type, "lastModified": file.lastModified });
-
-            if (i === 0) {
-                await sasjs.uploadFile('services/common/upload', [{ file: newFile, fileName: file.name }], { "tableRef": val }).then(
-                    (res) => {
-                        if (res?.sasjsAbort) {
-                            const error = `MAC: ${res.sasjsAbort[0].MAC}\n MSG: ${res.sasjsAbort[0].MSG}`;
-                            console.error(error);
-                        }
-                    },
-                    (err) => {
-                        console.error(err);
-                    }
-                )
-            } else {
-                await sasjs.uploadFile('services/common/append', [{ file: newFile, fileName: file.name }], { "tableRef": val }).then(
-                    (res) => {
-                        console.log(res);
-                    },
-                    (err) => {
-                        console.error(err);
-                    }
-                )
-            }
-        }
-    }
-}
-
-const MOCK = true;
-
-const appinitJson = {
-    "START_DTTM": "15FEB22:12:53:46.342"
-    , "listas":
-        [
-            { "LIST_NAME": "CEIS", "TABLE_REFERENCE": "LISTA_CEIS" }
-            , { "LIST_NAME": "CNAE", "TABLE_REFERENCE": "LISTA_CNAE" }
-            , { "LIST_NAME": "GAFI (HIGH RISK)", "TABLE_REFERENCE": "LISTA_GAFI_HIGH_RISK" }
-            , { "LIST_NAME": "GAFI (IN PROGRESS)", "TABLE_REFERENCE": "LISTA_GAFI_IN_PROGRESS" }
-            , { "LIST_NAME": "IBAMA", "TABLE_REFERENCE": "LISTA_IBAMA" }
-            , { "LIST_NAME": "MUNICIPIO (FRONTEIRA", "TABLE_REFERENCE": "LISTA_MUNICIPIO_DE_FRONTEIRA" }
-            , { "LIST_NAME": "MUNICIPIO (RISCO)", "TABLE_REFERENCE": "LISTA_MUNICIPIO_RISCO" }
-            , { "LIST_NAME": "OFAC", "TABLE_REFERENCE": "LISTA_OFAC" }
-            , { "LIST_NAME": "ONU (CONSOLIDADA)", "TABLE_REFERENCE": "LISTA_ONU_CONSOLIDADA" }
-            , { "LIST_NAME": "PAIS (RISCO)", "TABLE_REFERENCE": "LISTA_PAIS_RISCO" }
-            , { "LIST_NAME": "PAIS (RISCO EU)", "TABLE_REFERENCE": "LISTA_PAIS_RISCO_EU" }
-            , { "LIST_NAME": "PAIS (RISCO ONU)", "TABLE_REFERENCE": "LISTA_PAIS_RISCO_ONU" }
-            , { "LIST_NAME": "PARAISO FISCAL", "TABLE_REFERENCE": "LISTA_PARAISO_FISCAL" }
-            , { "LIST_NAME": "PEP (AML)", "TABLE_REFERENCE": "LISTA_PEP_AML" }
-            , { "LIST_NAME": "PEP (SERASA)", "TABLE_REFERENCE": "LISTA_PEP_SERASA" }
-            , { "LIST_NAME": "PEP (SISCOAF)", "TABLE_REFERENCE": "LISTA_PEP_SISCOAF" }
-            , { "LIST_NAME": "PESSOA/NOME/CPF", "TABLE_REFERENCE": "LISTA_PESSOA_NOME_CPF" }
-            , { "LIST_NAME": "PROFISSOES", "TABLE_REFERENCE": "LISTA_PROFISSOES" }
-            , { "LIST_NAME": "RESTRITIVO INTERNO", "TABLE_REFERENCE": "LISTA_RESTRITIVO_INTERNO_PLDFT" }
-            , { "LIST_NAME": "RISCO (OFAC)", "TABLE_REFERENCE": "LISTA_RISCO_OFAC" }
-            , { "LIST_NAME": "SANCAO (ARMAMENTOS)", "TABLE_REFERENCE": "LISTA_SANCAO_ARMAMENTOS" }
-            , { "LIST_NAME": "SANCAO (INTERNA)", "TABLE_REFERENCE": "LISTA_SANCAO_INTERNA" }
-            , { "LIST_NAME": "TRABALHO ESCRAVO", "TABLE_REFERENCE": "LISTA_TRABALHO_ESCRAVO" }
-            , { "LIST_NAME": "UK BANK", "TABLE_REFERENCE": "LISTA_UK_BANCO" }
-            , { "LIST_NAME": "UNIAO EUROPEIA", "TABLE_REFERENCE": "LISTA_UNIAO_EUROPEIA" }
-        ]
-    , "SYSUSERID": "visouz"
-    , "MF_GETUSER": "visouz"
-    , "SYS_JES_JOB_URI": "/jobExecution/jobs/f43475ed-c4d3-423b-bdac-15ebb35bd1e5"
-    , "SYSJOBID": "1922922"
-    , "_DEBUG": ""
-    , "_PROGRAM": "/Public/app/ICL/services/common/appinit"
-    , "SYSCC": "0"
-    , "SYSERRORTEXT": ""
-    , "SYSHOSTNAME": "bpn09au"
-    , "SYSSCPL": "Linux"
-    , "SYSSITE": "70288264"
-    , "SYSVLONG": "V.03.05M0P111119"
-    , "SYSWARNINGTEXT": ""
-    , "END_DTTM": "15FEB22:12:53:46.420"
-}
-
-const getdataJson = {
-    "START_DTTM": "15FEB22:12:55:28.362"
-    , "lista":
-        [
-            { "ID": "1", "SUBCLASSE": "0111301", "DENOMINACAO": "Cultivo de arroz", "RISCO": "Baixo", "NR_RISCO": "100", "HORA_INICIO": "05:00", "HORA_FIM": "19:00", "STATUS": "1" }
-            , { "ID": "2", "SUBCLASSE": "0111302", "DENOMINACAO": "Cultivo de milho", "RISCO": "Baixo", "NR_RISCO": "100", "HORA_INICIO": "05:00", "HORA_FIM": "19:00", "STATUS": "1" }
-            , { "ID": "3", "SUBCLASSE": "0111303", "DENOMINACAO": "Cultivo de trigo", "RISCO": "Baixo", "NR_RISCO": "100", "HORA_INICIO": "05:00", "HORA_FIM": "19:00", "STATUS": "1" }
-            , { "ID": "4", "SUBCLASSE": "3250706", "DENOMINACAO": "SERVIÇOS DE PRÓTESE DENTÁRIA", "RISCO": "Baixo", "NR_RISCO": "100", "HORA_INICIO": "09:00", "HORA_FIM": "18:00", "STATUS": "1" }
-        ]
-    , "SYSUSERID": "visouz"
-    , "MF_GETUSER": "visouz"
-    , "SYS_JES_JOB_URI": "/jobExecution/jobs/49ba7689-30a6-4d75-8e35-af73c3bf80c0"
-    , "SYSJOBID": "1925540"
-    , "_DEBUG": ""
-    , "_PROGRAM": "/Public/app/ICL/services/common/getdata"
-    , "SYSCC": "0"
-    , "SYSERRORTEXT": ""
-    , "SYSHOSTNAME": "bpn09au"
-    , "SYSSCPL": "Linux"
-    , "SYSSITE": "70288264"
-    , "SYSVLONG": "V.03.05M0P111119"
-    , "SYSWARNINGTEXT": ""
-    , "END_DTTM": "15FEB22:12:55:28.441"
-}

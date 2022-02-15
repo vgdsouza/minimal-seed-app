@@ -41,7 +41,7 @@
   color: #414141;
 }
 
-#listas {
+#listas, #editar_lista {
   max-width: 720px;
 }
 
@@ -51,10 +51,14 @@
   padding: 0 !important;
 }
 
-.mytable div {
+.mytable div:first-child {
   color: #f5f5f5;
   background-color: #414141;
   font-size: 2rem;
+}
+
+.mytable .input-group {
+  padding: 1rem;
 }
 
 .mytable span {
