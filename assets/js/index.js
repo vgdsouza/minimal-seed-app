@@ -1,30 +1,15 @@
+var MINHAS_LISTAS;
+
 window.addEventListener("load", function () {
     /** @type {HTMLParagraphElement} */
     const currentUser = document.querySelector("#currentUser");
-
     /** @type {HTMLDivElement} */
     const spinner = document.querySelector("#spinner");
-
     /** @type {HTMLDivElement} */
-    const main = document.querySelector("#main");
-
-    /** @type {HTMLSelectElement} */
-    const tableselect = document.querySelector("#tableselect");
-
-    /** @type {HTMLInputElement} */
-    const tablefile = document.querySelector("#tablefile");
-
-    /** @type {HTMLButtonElement} */
-    const tablebutton = document.querySelector("#tablebutton");
-
-    /** @type {HTMLTableElement} */
-    const mytable = document.querySelector("#mytable");
-
-    /** @type {HTMLTableRowElement} */
-    const thead = document.querySelector("#thead");
-
+    const listas = document.querySelector("#listas");
     /** @type {HTMLTableSectionElement} */
-    const tbody = document.querySelector("#tbody");
+    const tablebody = this.document.querySelector("#listas table tbody");
+
 
     const sasjs = new SASjs.default({
         appLoc: "/Public/app/ICL",
@@ -64,70 +49,130 @@ window.addEventListener("load", function () {
                 }
             });
         } else {
-            createSelectListas(appinitJson.listas);
+            MINHAS_LISTAS = appinitJson.listas;
+            createTableListas(appinitJson.listas);
         }
     }
 
-    function createSelectListas(lists) {
+    function createTableListas(lists) {
         lists.forEach((list) => {
-            /** @type {HTMLOptionElement} */
-            const option = new Option();
-            option.value = list['TABLE_REFERENCE'];
-            option.text = list['LIST_NAME'];
-            tableselect.options.add(option);
+            const tr = document.createElement("tr");
+            const td1 = document.createElement("td");
+            const td2 = document.createElement("td");
+            const td3 = document.createElement("td");
+            const td4 = document.createElement("td");
+            td1.innerText = list['LIST_NAME'];
+            td2.innerHTML = `<button id=\"${list['TABLE_REFERENCE']}_VER\" value=\"${list['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/eye.svg\"></button>`;
+            td3.innerHTML = `<button id=\"${list['TABLE_REFERENCE']}_EDITAR\" value=\"${list['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/pen.svg\"></button>`;
+            td4.innerHTML = `<button id=\"${list['TABLE_REFERENCE']}_EXCLUIR\" value=\"${list['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/trash.svg\"></button>`;
+            td2.style.width = "0";
+            td3.style.width = "0";
+            td4.style.width = "0";
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            tablebody.appendChild(tr);
         });
 
-        tablefile.value = "";
+        MINHAS_LISTAS.forEach((Lista) => {
+            const btnVer = document.querySelector(`#${Lista['TABLE_REFERENCE']}_VER`);
+            const btnEditar = document.querySelector(`#${Lista['TABLE_REFERENCE']}_EDITAR`);
+            const btnExcluir = document.querySelector(`#${Lista['TABLE_REFERENCE']}_EXCLUIR`);
+            const btnVerVoltar = document.querySelector("#ver_lista button");
+
+            btnVer.addEventListener("click", function () {
+                spinner.style.display = "";
+                listas.style.display = "none";
+                document.querySelector("#ver_lista > div > span").innerText = Lista['LIST_NAME'];
+                getdata(btnVer.value);
+            });
+
+            btnVerVoltar.addEventListener("click", function () {
+                document.querySelector("#ver_lista").style.display = "none";
+                listas.style.display = "";
+            })
+
+            btnEditar.addEventListener("click", function () {
+                spinner.style.display = "";
+                listas.style.display = "none";
+            });
+
+            btnExcluir.addEventListener("click", function () {
+                spinner.style.display = "";
+                listas.style.display = "none";
+            });
+        })
+
         spinner.style.display = "none";
-        main.style.display = "flex";
+        listas.style.display = "";
     }
     /* APPINIT END */
 
 
     /* GETDATA */
-    tableselect.addEventListener("change", getdata);
-
-    async function getdata() {
-        mytable.style.display = "none";
-
-        clearTable();
-
-        const val = String(tableselect.options[tableselect.selectedIndex].value);
-
-        if (val === "") {
-            tablefile.disabled = true;
-        } else {
-            const dataObject = {
-                [val]: [{}]
-            }
-
-            if (!MOCK) {
-                await sasjs.request("services/common/getdata", dataObject).then((res) => {
-                    let responseJson;
-
-                    try {
-                        responseJson = res;
-                    } catch (e) {
-                        console.error(e);
-                    }
-
-                    if (responseJson && responseJson.status === 449) {
-                        getdata();
-                    } else if (responseJson) {
-                        createTableView(responseJson.lista);
-                    }
-                });
-            } else {
-                setTimeout(createTableView, 1000, getdataJson.lista);
-            }
+    async function getdata(value) {
+        const dataObject = {
+            [value]: [{}]
         }
 
-        mytable.style.display = "table";
-        tablefile.value = "";
-        tablefile.disabled = false;
+        if (!MOCK) {
+            await sasjs.request("services/common/getdata", dataObject).then((res) => {
+                let responseJson;
+
+                try {
+                    responseJson = res;
+                } catch (e) {
+                    console.error(e);
+                }
+
+                if (responseJson && responseJson.status === 449) {
+                    getdata();
+                } else if (responseJson) {
+                    createTableView(responseJson.lista);
+                }
+            });
+        } else {
+            setTimeout(createTableView, 1000, getdataJson.lista);
+        }
     }
 
-    function clearTable() {
+    function createTableView(lista) {
+        const headers = document.querySelector("#ver_lista thead tr");
+        const viewbody = document.querySelector("#ver_lista tbody");
+        const ver_lista = document.querySelector("#ver_lista")
+
+        clearTable(headers, viewbody);
+
+        if (lista[0]) {
+            let colunas = Object.keys(lista[0]);
+
+            colunas.forEach((col) => {
+                const th = document.createElement("th");
+                th.scope = "col";
+                th.innerText = col;
+                headers.appendChild(th);
+            });
+
+            lista.forEach((linha) => {
+                /** @type {HTMLTableRowElement} */
+                const tr = document.createElement("tr");
+                colunas.forEach((col) => {
+                    /** @type {HTMLTableCellElement} */
+                    const td = document.createElement("td");
+                    td.innerText = linha[col];
+                    tr.appendChild(td);
+                });
+
+                viewbody.appendChild(tr);
+            });
+        }
+
+        spinner.style.display = "none";
+        ver_lista.style.display = "";
+    }
+
+    function clearTable(thead, tbody) {
         while (thead.firstChild) {
             thead.removeChild(thead.lastChild);
         }
@@ -141,43 +186,17 @@ window.addEventListener("load", function () {
             tbody.removeChild(tbody.lastChild);
         }
     }
-
-    function createTableView(lista) {
-        if (lista[0]) {
-            let colunas = Object.keys(lista[0]);
-
-            colunas.forEach((col) => {
-                /** @type {HTMLTableCellElement} */
-                const th = document.createElement("th");
-                th.scope = "col";
-                th.innerText = col;
-                thead.appendChild(th);
-            });
-
-            lista.forEach((linha) => {
-                /** @type {HTMLTableRowElement} */
-                const tr = document.createElement("tr");
-                colunas.forEach((col) => {
-                    /** @type {HTMLTableCellElement} */
-                    const td = document.createElement("td");
-                    td.innerText = linha[col];
-                    tr.appendChild(td);
-                });
-                tbody.appendChild(tr);
-            });
-        }
-    }
     /* GETDATA END */
 
 
     /* UPDATEDATA */
-    tablefile.addEventListener("change", function () {
+    /*tablefile.addEventListener("change", function () {
         if (!(tablefile.value === "")) {
             tablebutton.disabled = false;
         }
-    });
+    });*/
 
-    tablebutton.addEventListener("click", updatedata);
+    //tablebutton.addEventListener("click", updatedata);
 
     async function updatedata() {
         tablefile.disabled = true;

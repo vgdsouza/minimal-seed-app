@@ -1,30 +1,73 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=edge" />
-        <link rel="shortcut icon" href="assets/img/favicon.ico" />
-        <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="assets/css/index.css" />
-    </head>
-    <body id="body" class="myflex">
-        <!-- Nav -->
-        <nav id="nav" class="myflex">
-            <img src="assets/img/bancopan.svg" />
-            <p id="currentUser"></p>
-        </nav>
-        <!-- Nav End -->
+
+<head>
+    <meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="assets/img/favicon.ico" />
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/css/index.css" />
+</head>
+
+<body id="body" class="myflex">
+    <!-- Nav -->
+    <nav id="nav" class="myflex">
+        <img src="assets/img/bancopan.svg" />
+        <p id="currentUser">visouz</p>
+    </nav>
+    <!-- Nav End -->
 
 
+    <!-- Main -->
+    <div id="main" class="myflex">
         <!-- Spinner -->
         <div id="spinner" class="myflex">
             <div class="spinner-border"></div>
             <strong>Carregando...</strong>
         </div>
         <!-- Spinner End -->
-
-
-        <!-- Main -->
-        <div id="main" class="myflex">
+        <!-- Listas -->
+        <div id="listas" class="mytable myflex" style="display: none;">
+            <div class="myflex">
+                <span>Gerenciar Listas</span>
+                <button class="btn btn-success">
+                    <img src="assets/img/circle-plus.svg" />
+                    <span>Nova Lista</span>
+                </button>
+            </div>
+            <table class="table table-hover">
+                <tbody></tbody>
+            </table>
+        </div>
+        <!-- Listas End -->
+        <!-- Ver Lista -->
+        <div id="ver_lista" class="mytable myflex" style="display: none;">
+            <div class="myflex">
+                <span></span>
+                <button class="btn btn-success">
+                    <span>Voltar</span>
+                </button>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                    <tr></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <!-- Ver Lista End -->
+        <!--
+            <div id="tableview" class="myflex">
+                <div id="cabecalho" class="myflex">
+                    <p>Gerenciar <strong>Listas</strong></p>
+                    <button id="criarLista" class="btn btn-success">
+                        <img src="assets/img/circle-plus.svg"/>
+                        <span>Nova Lista</span>
+                    </button>
+                </div>
+                <table id="selectTable" class="table table-hover">
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
             <div id="tablecontrol" class="myflex">
                 <select id="tableselect" class="form-select">
                     <option selected value="">Selecione uma lista</option>
@@ -47,23 +90,25 @@
                     <tbody id="tbody"></tbody>
                 </table>
             </div>
-        </div>
-        <!-- Main End -->
+        -->
+    </div>
+    <!-- Main End -->
 
 
-        <!-- Footer -->
-        <footer id="footer" class="myflex">
-            <p>Banco PAN S.A. (“PAN”), instituição financeira, inscrita sob o CNPJ nº 59.285.411/0001-13, com sede na
-                Avenida Paulista, nº 1.374, 16º andar, Bela Vista, São Paulo – SP.</p>
-        </footer>
-        <!-- Footer End -->
+    <!-- Footer -->
+    <footer id="footer" class="myflex">
+        <p>Banco PAN S.A. (“PAN”), instituição financeira, inscrita sob o CNPJ nº 59.285.411/0001-13, com sede na
+            Avenida Paulista, nº 1.374, 16º andar, Bela Vista, São Paulo – SP.</p>
+    </footer>
+    <!-- Footer End -->
 
 
-        <!-- JavaScript -->
-        <script src="assets/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/js/sasjs.js"></script>
-        <script src="assets/js/index.js"></script>
-        <script src="assets/js/filter.js"></script>
-        <!-- JavaScript End -->
-    </body>
+    <!-- JavaScript -->
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/sasjs.js"></script>
+    <script src="assets/js/index.js"></script>
+    <script src="assets/js/filter.js"></script>
+    <!-- JavaScript End -->
+</body>
+
 </html>
