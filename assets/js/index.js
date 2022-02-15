@@ -17,9 +17,6 @@ window.addEventListener("load", function () {
     /** @type {HTMLButtonElement} */
     const tablebutton = document.querySelector("#tablebutton");
 
-    /** @type {HTMLDivElement} */
-    const tablespinner = document.querySelector("#tablespinner");
-
     /** @type {HTMLTableElement} */
     const mytable = document.querySelector("#mytable");
 
@@ -45,7 +42,7 @@ window.addEventListener("load", function () {
             }
         });
     } else {
-        appinit();
+        this.setTimeout(appinit, 1000);
     }
 
     /* APPINIT */
@@ -91,8 +88,7 @@ window.addEventListener("load", function () {
     tableselect.addEventListener("change", getdata);
 
     async function getdata() {
-        mytable.style.display = "";  // No CSS está definido como None
-        tablespinner.style.display = "flex";
+        mytable.style.display = "none";
 
         clearTable();
 
@@ -122,11 +118,10 @@ window.addEventListener("load", function () {
                     }
                 });
             } else {
-                createTableView(getdataJson.lista);
+                setTimeout(createTableView, 1000, getdataJson.lista);
             }
         }
 
-        tablespinner.style.display = "";  // No CSS está definido como None
         mytable.style.display = "table";
         tablefile.value = "";
         tablefile.disabled = false;
