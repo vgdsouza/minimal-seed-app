@@ -172,26 +172,10 @@ window.addEventListener("load", function () {
     }
 
     async function updatedata(input, value) {
-        const chunkSize = 5 * 1024 * 1024; //chunk size is 5MB
         const myfile = input.files[0];
 
         if (myfile) {
-            const numberOfChunks = Math.ceil(myfile.size / chunkSize);
-
-            for (let i = 0; i < numberOfChunks; i++) {
-                const chunkStart = chunkSize * i;
-                const chunkEnd = Math.min(chunkStart + chunkSize, myfile.size);
-                const chunk = myfile.slice(chunkStart, chunkEnd);
-                const newFile = new File([chunk], myfile.name, { "type": myfile.type, "lastModified": myfile.lastModified });
-
-                if (i === 0) {
-                    await sasjs.uploadFile('services/common/uploaddata', [{ "file": newFile, "fileName": myfile.name }]);
-                } else if (i === (numberOfChunks - 1)) {
-                    await sasjs.uploadFile('services/common/joindata', [{ "file": newFile, "fileName": myfile.name }], { "tableRef": value });
-                } else {
-                    await sasjs.uploadFile('services/common/appenddata', [{ "file": newFile, "fileName": myfile.name }]);
-                }
-            }
+            await sasjs.uploadFile('services/common/uploaddata', [{ "file": newFile, "fileName": myfile.name }], { "tableRef": value });
         }
     }
     /* UPDATEDATA END */
