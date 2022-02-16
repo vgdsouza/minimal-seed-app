@@ -1,27 +1,19 @@
-window.addEventListener("load", function () {
-    /** @type {HTMLInputElement} */
-    const tablefilterinput = document.querySelector("#tablefilterinput");
+window.addEventListener("load", function() {
+    const _filter = document.querySelector("#filter");
+    const _tbody = document.querySelector("#ver_lista table tbody");
 
-    /** @type {HTMLTableSectionElement} */
-    const tbody = document.querySelector("#tbody");
-
-    //tablefilterinput.addEventListener("keyup", filtraTabela);
+    _filter.addEventListener("keyup", filtraTabela);
 
     function filtraTabela() {
-        /** @type {String} */
         let textoBusca;
-        /** @type {String} */
         let textoCelula;
-        /** @type {HTMLTableRowElement} */
         let linhaAtual;
-        /** @type {HTMLTableCellElement} */
         let celulaAtual;
-        /** @type {Boolean} */
         let buscaEncontrada;
 
-        textoBusca = tratamentoTextual(tablefilterinput.value);
+        textoBusca = tratamentoTextual(_filter.value);
 
-        for (let linha of tbody.childNodes) {
+        for (let linha of _tbody.childNodes) {
             linhaAtual = linha;
             buscaEncontrada = false;
 

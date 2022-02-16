@@ -47,6 +47,12 @@
                     <span>Voltar</span>
                 </button>
             </div>
+            <div class="input-group">
+                <span class="input-group-text">
+                    <img src="assets/img/magnifying-glass.svg" />
+                </span>
+                <input id="filter" type="text" class="form-control" placeholder="Pesquisar na lista">
+            </div>
             <table class="table table-hover">
                 <thead>
                     <tr></tr>
@@ -64,48 +70,22 @@
                 </button>
             </div>
             <div class="input-group">
-                <input type="file" class="form-control" id="inputGroupFile04">
+                <input type="file" class="form-control">
                 <button class="btn btn-success">Button</button>
             </div>
         </div>
         <!-- Editar Lista End -->
-
-        <!--
-            <div id="tableview" class="myflex">
-                <div id="cabecalho" class="myflex">
-                    <p>Gerenciar <strong>Listas</strong></p>
-                    <button id="criarLista" class="btn btn-success">
-                        <img src="assets/img/circle-plus.svg"/>
-                        <span>Nova Lista</span>
-                    </button>
-                </div>
-                <table id="selectTable" class="table table-hover">
-                    <tbody id="tbody"></tbody>
-                </table>
-            </div>
-            <div id="tablecontrol" class="myflex">
-                <select id="tableselect" class="form-select">
-                    <option selected value="">Selecione uma lista</option>
-                </select>
-                <div class="input-group">
-                    <input type="file" id="tablefile" class="form-control" disabled/>
-                    <button type="button" id="tablebutton" class="btn btn-primary" disabled>ENVIAR</button>
+        <!-- Excluir Lista -->
+        <div id="excluir_lista" class="myflex" style="display: none;">
+            <div class="myflex">
+                <p>Desativar a lista <span></span>?</p>
+                <div class="myflex">
+                    <button class="btn btn-secondary">Desativar</button>
+                    <button class="btn btn-primary">Cancelar</button>
                 </div>
             </div>
-            <hr>
-            <div id="tablefilter" class="input-group">
-                <span class="input-group-text">&#128270;</span>
-                <input id="tablefilterinput" type="text" class="form-control" placeholder="Procurar na lista">
-            </div>
-            <div id="tableview" class="myflex">
-                <table id="mytable" class="table table-hover">
-                    <thead>
-                        <tr id="thead"></tr>
-                    </thead>
-                    <tbody id="tbody"></tbody>
-                </table>
-            </div>
-        -->
+        </div>
+        <!-- Excluir Lista End -->
     </div>
     <!-- Main End -->
 

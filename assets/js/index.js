@@ -1,13 +1,12 @@
 window.addEventListener("load", function () {
     /** @type {HTMLParagraphElement} */
-    const currentUser = document.querySelector("#currentUser");
+    const _currentUser = document.querySelector("#currentUser");
     /** @type {HTMLDivElement} */
-    const spinner = document.querySelector("#spinner");
+    const _spinner = document.querySelector("#spinner");
     /** @type {HTMLDivElement} */
-    const listas = document.querySelector("#listas");
+    const _listas = document.querySelector("#listas");
     /** @type {HTMLTableSectionElement} */
-    const tablebody = this.document.querySelector("#listas table tbody");
-
+    const _tablebody = this.document.querySelector("#listas table tbody");
 
     const sasjs = new SASjs.default({
         appLoc: "/Public/app/ICL",
@@ -19,7 +18,7 @@ window.addEventListener("load", function () {
 
     sasjs.checkSession().then((res) => {
         if (res.isLoggedIn) {
-            currentUser.innerText = res.userName;
+            _currentUser.innerText = res.userName;
             appinit();
         }
     });
@@ -61,7 +60,7 @@ window.addEventListener("load", function () {
             tr.appendChild(td2);
             tr.appendChild(td3);
             tr.appendChild(td4);
-            tablebody.appendChild(tr);
+            _tablebody.appendChild(tr);
         });
 
         listas.forEach((lista) => {
@@ -70,39 +69,44 @@ window.addEventListener("load", function () {
             const btnExcluir = document.querySelector(`#${lista['TABLE_REFERENCE']}_EXCLUIR`);
             const btnVerVoltar = document.querySelector("#ver_lista button");
             const btnEditarVoltar = document.querySelector("#editar_lista button");
+            const btnExcluirVoltar = document.querySelector("#excluir_lista button:last-child");
 
             btnVer.addEventListener("click", function () {
-                spinner.style.display = "";
-                listas.style.display = "none";
+                _spinner.style.display = "";
+                _listas.style.display = "none";
                 document.querySelector("#ver_lista > div > span").innerText = lista['LIST_NAME'];
                 getdata(btnVer.value);
             });
 
             btnVerVoltar.addEventListener("click", function () {
                 document.querySelector("#ver_lista").style.display = "none";
-                listas.style.display = "";
+                _listas.style.display = "";
             })
 
             btnEditar.addEventListener("click", function () {
-                spinner.style.display = "";
-                listas.style.display = "none";
+                _spinner.style.display = "";
+                _listas.style.display = "none";
                 document.querySelector("#editar_lista > div > span").innerText = lista['LIST_NAME'];
                 renderUpdate(btnEditar.value);
             });
 
             btnEditarVoltar.addEventListener("click", function () {
                 document.querySelector("#editar_lista").style.display = "none";
-                listas.style.display = "";
+                _listas.style.display = "";
             })
 
             btnExcluir.addEventListener("click", function () {
-                spinner.style.display = "";
-                listas.style.display = "none";
+                renderDelete(lista['LIST_NAME']);
+            });
+
+            btnExcluirVoltar.addEventListener("click", function () {
+                document.querySelector("#excluir_lista").style.display = "none";
+                _listas.style.display = "";
             });
         })
 
-        spinner.style.display = "none";
-        listas.style.display = "";
+        _spinner.style.display = "none";
+        _listas.style.display = "";
     }
     /* APPINIT END */
 
@@ -131,11 +135,11 @@ window.addEventListener("load", function () {
     }
 
     function createTableView(lista) {
-        const headers = document.querySelector("#ver_lista thead tr");
-        const viewbody = document.querySelector("#ver_lista tbody");
-        const ver_lista = document.querySelector("#ver_lista");
+        const _headers = document.querySelector("#ver_lista thead tr");
+        const _viewbody = document.querySelector("#ver_lista tbody");
+        const _ver_lista = document.querySelector("#ver_lista");
 
-        clearTable(headers, viewbody);
+        clearTable(_headers, _viewbody);
 
         if (lista[0]) {
             let colunas = Object.keys(lista[0]);
@@ -144,25 +148,23 @@ window.addEventListener("load", function () {
                 const th = document.createElement("th");
                 th.scope = "col";
                 th.innerText = col;
-                headers.appendChild(th);
+                _headers.appendChild(th);
             });
 
             lista.forEach((linha) => {
-                /** @type {HTMLTableRowElement} */
                 const tr = document.createElement("tr");
                 colunas.forEach((col) => {
-                    /** @type {HTMLTableCellElement} */
                     const td = document.createElement("td");
                     td.innerText = linha[col];
                     tr.appendChild(td);
                 });
 
-                viewbody.appendChild(tr);
+                _viewbody.appendChild(tr);
             });
         }
 
-        spinner.style.display = "none";
-        ver_lista.style.display = "";
+        _spinner.style.display = "none";
+        _ver_lista.style.display = "";
     }
 
     function clearTable(thead, tbody) {
@@ -171,7 +173,6 @@ window.addEventListener("load", function () {
         }
 
         while (tbody.firstChild) {
-            /** @type {HTMLTableRowElement} */
             const lastRow = tbody.lastChild;
             while (lastRow.firstChild) {
                 lastRow.removeChild(lastRow.lastChild);
@@ -184,16 +185,16 @@ window.addEventListener("load", function () {
 
     /* UPDATEDATA */
     function renderUpdate(value) {
-        const editar_lista = document.querySelector("#editar_lista");
-        const fileInput = document.querySelector("#editar_lista .input-group input");
-        const btnEnviar = document.querySelector("#editar_lista .input-group button");
+        const _editar_lista = document.querySelector("#editar_lista");
+        const _fileInput = document.querySelector("#editar_lista .input-group input");
+        const _btnEnviar = document.querySelector("#editar_lista .input-group button");
 
-        btnEnviar.addEventListener("click", function () {
-            updatedata(fileInput, value);
+        _btnEnviar.addEventListener("click", function () {
+            updatedata(_fileInput, value);
         });
 
-        spinner.style.display = "none";
-        editar_lista.style.display = "";
+        _spinner.style.display = "none";
+        _editar_lista.style.display = "";
     }
 
     async function updatedata(input, value) {
@@ -218,4 +219,21 @@ window.addEventListener("load", function () {
         }
     }
     /* UPDATEDATA END */
+
+
+    /* DISABLELIST */
+    function renderDelete(lista) {
+        const _excluir_lista = document.querySelector("#excluir_lista");
+        const _span = document.querySelector("#excluir_lista div span");
+        const _btnConfirmar = document.querySelector("#excluir_lista button:first-child");
+
+        _btnConfirmar.addEventListener("click", function () {
+            console.log("FOO");
+        });
+
+        _span.innerText = lista;
+
+        _excluir_lista.style.display = "";
+    }
+    /* DISABLELIST END */
 });
