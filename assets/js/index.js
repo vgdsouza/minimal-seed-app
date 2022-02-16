@@ -25,8 +25,8 @@ window.addEventListener("load", function () {
 
     /* APPINIT */
     async function appinit() {
-        await sasjs.request("services/common/appinit", null).then(() => {
-            createTableListas(responseJson.listas);
+        await sasjs.request("services/common/appinit", null).then((res) => {
+            createTableListas(res.listas);
         });
     }
 
@@ -101,8 +101,8 @@ window.addEventListener("load", function () {
 
     /* GETDATA */
     async function getdata(value) {
-        await sasjs.request("services/common/getdata", { [value]: [{}] }).then(() => {
-            createTableView(responseJson.lista);
+        await sasjs.request("services/common/getdata", { [value]: [{}] }).then((res) => {
+            createTableView(res.lista);
         });
     }
 
@@ -204,7 +204,7 @@ window.addEventListener("load", function () {
         const _btnConfirmar = document.querySelector("#excluir_lista button:first-child");
 
         _btnConfirmar.addEventListener("click", function () {
-            await sasjs.request("services/common/disablelist", { [value]: [{}] });
+            sasjs.request("services/common/disablelist", { [value]: [{}] });
         });
 
         _span.innerText = lista;
