@@ -57,7 +57,7 @@
 }
 
 #excluir_lista>div {
-    width: fit-content;
+    width: auto;
     flex-direction: column;
     justify-content: center;
     background-color: #fff;

@@ -25,20 +25,8 @@ window.addEventListener("load", function () {
 
     /* APPINIT */
     async function appinit() {
-        await sasjs.request("services/common/appinit", null).then((res) => {
-            let responseJson;
-
-            try {
-                responseJson = res;
-            } catch (e) {
-                console.error(e);
-            }
-
-            if (responseJson && responseJson.status === 449) {
-                appinit();
-            } else if (responseJson && responseJson.listas) {
-                createTableListas(responseJson.listas);
-            }
+        await sasjs.request("services/common/appinit", null).then(() => {
+            createTableListas(responseJson.listas);
         });
     }
 
@@ -96,7 +84,7 @@ window.addEventListener("load", function () {
             })
 
             btnExcluir.addEventListener("click", function () {
-                renderDelete(lista['LIST_NAME']);
+                renderDelete(lista['LIST_NAME'], btnExcluir.value);
             });
 
             btnExcluirVoltar.addEventListener("click", function () {
@@ -113,24 +101,8 @@ window.addEventListener("load", function () {
 
     /* GETDATA */
     async function getdata(value) {
-        const dataObject = {
-            [value]: [{}]
-        }
-
-        await sasjs.request("services/common/getdata", dataObject).then((res) => {
-            let responseJson;
-
-            try {
-                responseJson = res;
-            } catch (e) {
-                console.error(e);
-            }
-
-            if (responseJson && responseJson.status === 449) {
-                getdata();
-            } else if (responseJson) {
-                createTableView(responseJson.lista);
-            }
+        await sasjs.request("services/common/getdata", { [value]: [{}] }).then(() => {
+            createTableView(responseJson.lista);
         });
     }
 
@@ -138,8 +110,10 @@ window.addEventListener("load", function () {
         const _headers = document.querySelector("#ver_lista thead tr");
         const _viewbody = document.querySelector("#ver_lista tbody");
         const _ver_lista = document.querySelector("#ver_lista");
+        const _filter = document.querySelector("#filter");
 
         clearTable(_headers, _viewbody);
+        _filter.value = "";
 
         if (lista[0]) {
             let colunas = Object.keys(lista[0]);
@@ -202,18 +176,20 @@ window.addEventListener("load", function () {
         const myfile = input.files[0];
 
         if (myfile) {
-            const numberOfChunks = Math.ceil(file.size / chunkSize);
+            const numberOfChunks = Math.ceil(myfile.size / chunkSize);
 
             for (let i = 0; i < numberOfChunks; i++) {
                 const chunkStart = chunkSize * i;
-                const chunkEnd = Math.min(chunkStart + chunkSize, file.size);
-                const chunk = file.slice(chunkStart, chunkEnd);
-                const newFile = new File([chunk], file.name, { "type": file.type, "lastModified": file.lastModified });
+                const chunkEnd = Math.min(chunkStart + chunkSize, myfile.size);
+                const chunk = myfile.slice(chunkStart, chunkEnd);
+                const newFile = new File([chunk], myfile.name, { "type": myfile.type, "lastModified": myfile.lastModified });
 
                 if (i === 0) {
-                    await sasjs.uploadFile('services/common/updatedata', [{ "file": newFile, "fileName": myfile.name }], { "tableRef": value });
+                    await sasjs.uploadFile('services/common/uploaddata', [{ "file": newFile, "fileName": myfile.name }]);
+                } else if (i === (numberOfChunks - 1)) {
+                    await sasjs.uploadFile('services/common/joindata', [{ "file": newFile, "fileName": myfile.name }], { "tableRef": value });
                 } else {
-                    await sasjs.uploadFile('services/common/appenddata', [{ "file": newFile, "fileName": myfile.name }], { "tableRef": value });
+                    await sasjs.uploadFile('services/common/appenddata', [{ "file": newFile, "fileName": myfile.name }]);
                 }
             }
         }
@@ -222,13 +198,13 @@ window.addEventListener("load", function () {
 
 
     /* DISABLELIST */
-    function renderDelete(lista) {
+    function renderDelete(lista, value) {
         const _excluir_lista = document.querySelector("#excluir_lista");
         const _span = document.querySelector("#excluir_lista div span");
         const _btnConfirmar = document.querySelector("#excluir_lista button:first-child");
 
         _btnConfirmar.addEventListener("click", function () {
-            console.log("FOO");
+            await sasjs.request("services/common/disablelist", { [value]: [{}] });
         });
 
         _span.innerText = lista;
