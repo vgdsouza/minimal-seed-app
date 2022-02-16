@@ -29,7 +29,7 @@
         <div id="listas" class="mytable myflex" style="display: none;">
             <div class="myflex">
                 <span>Gerenciar Listas</span>
-                <button class="btn btn-success">
+                <button id="criar_lista_btn" class="btn btn-success">
                     <img src="assets/img/circle-plus.svg" />
                     <span>Nova Lista</span>
                 </button>
@@ -39,6 +39,21 @@
             </table>
         </div>
         <!-- Listas End -->
+        <!-- Criar Lista -->
+        <div id="criar_lista" class="myflex" style="display: none;">
+            <div class="myflex">
+                <div class="myflex">
+                    <p>Criar uma nova lista</p>
+                    <input id="criar_lista_name" type="text" class="form-control" placeholder="Nome da nova lista">
+                    <input id="criar_lista_file" type="file" class="form-control">
+                </div>
+                <div class="myflex">
+                    <button class="btn btn-secondary">Criar</button>
+                    <button class="btn btn-primary">Cancelar</button>
+                </div>
+            </div>
+        </div>
+        <!-- Criar Lista End -->
         <!-- Ver Lista -->
         <div id="ver_lista" class="mytable myflex" style="display: none;">
             <div class="myflex">

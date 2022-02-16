@@ -38,13 +38,14 @@
     width: 21ch;
     height: 100%;
     color: #414141;
+    display: none;
 }
 
-#listas,
-#editar_lista {
+#listas, #editar_lista {
     max-width: 720px;
 }
 
+#criar_lista,
 #excluir_lista {
     position: fixed;
     top: 0;
@@ -56,6 +57,7 @@
     justify-content: center;
 }
 
+#criar_lista>div,
 #excluir_lista>div {
     width: auto;
     flex-direction: column;
@@ -67,18 +69,29 @@
     font-size: 1rem;
 }
 
+#criar_lista>div>div,
 #excluir_lista>div>div {
     margin-top: 1rem;
     padding: 0;
     justify-content: center;
 }
 
+#criar_lista>div>div button:first-child,
 #excluir_lista>div>div button:first-child {
     margin-right: 1rem;
 }
 
+#criar_lista div span,
 #excluir_lista div span {
     font-weight: 700;
+}
+
+#criar_lista>.myflex>.myflex:first-child {
+    flex-direction: column;
+}
+
+#criar_lista>.myflex>.myflex:first-child>input {
+    margin-top: 0.5rem;
 }
 
 .mytable {
