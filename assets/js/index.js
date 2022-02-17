@@ -16,14 +16,24 @@ window.addEventListener("load", function () {
         loginMechanism: "Redirected"
     });
 
-    sasjs.checkSession().then((res) => {
-        if (res.isLoggedIn) {
-            _currentUser.innerText = res.userName;
-            appinit();
-        }
-    });
+    async function checkUserLoggedIn() {
+        await sasjs.checkSession().then((response) => {
+            let responseJson;
+            try {
+                responseJson = response;
+            } catch (e) {
+                console.error(e);
+            }
+            if (responseJson && responseJson.status === 449) {
+                checkUserLoggedIn();
+            } else if (responseJson && response.isLoggedIn) {
+                _currentUser.innerText = response.userName;
+                appinit();
+            }
+        });
+    }
 
-    appinit();
+    checkUserLoggedIn();
 
     /* APPINIT */
     async function appinit() {
@@ -36,14 +46,13 @@ window.addEventListener("load", function () {
             }
             if (responseJson && responseJson.status === 449) {
                 appinit();
-            } else if (responseJson && responseJson.areas) {
-                createTableListas(responseJson);
+            } else if (responseJson && responseJson.listas) {
+                createTableListas(responseJson.listas);
             }
         });
     }
 
-    function createTableListas(json) {
-        const listas = json.listas;
+    function createTableListas(listas) {
         listas.forEach((lista) => {
             const tr = document.createElement("tr");
             const td1 = document.createElement("td");
@@ -137,15 +146,13 @@ window.addEventListener("load", function () {
             }
             if (responseJson && responseJson.status === 449) {
                 getdata(value);
-            } else if (responseJson && responseJson.areas) {
+            } else if (responseJson && responseJson.lista) {
                 createTableView(responseJson.lista);
             }
         });
     }
 
-    function createTableView(json) {
-        const lista = json.lista;
-
+    function createTableView(lista) {
         const _headers = document.querySelector("#ver_lista thead tr");
         const _viewbody = document.querySelector("#ver_lista tbody");
         const _ver_lista = document.querySelector("#ver_lista");
@@ -214,8 +221,18 @@ window.addEventListener("load", function () {
         const myfile = input.files[0];
 
         if (myfile) {
-            await sasjs.uploadFile('services/common/uploaddata', [{ "file": myfile, "fileName": myfile.name }], { "tableRef": value }).then((res) => {
-                console.log(res);
+            await sasjs.uploadFile('services/common/uploaddata', [{ "file": myfile, "fileName": myfile.name }], { "tableRef": value }).then((response) => {
+                let responseJson;
+                try {
+                    responseJson = response;
+                } catch (e) {
+                    console.error(e);
+                }
+                if (responseJson && responseJson.status === 449) {
+                    uploaddata(input, value);
+                } else if (responseJson) {
+                    console.log(responseJson);
+                }
             });
         }
     }
@@ -247,7 +264,7 @@ window.addEventListener("load", function () {
             }
             if (responseJson && responseJson.status === 449) {
                 disabledata(value);
-            } else if (responseJson && responseJson.areas) {
+            } else if (responseJson) {
                 console.log(responseJson);
             }
         });
@@ -264,7 +281,7 @@ window.addEventListener("load", function () {
         const _criar_lista_file = document.querySelector("#criar_lista_file");
 
         _btnConfirmar.addEventListener("click", function () {
-            createdata(_criar_lista_name, _criar_lista_file);
+            createdata(_criar_lista_name.value, _criar_lista_file);
         });
 
         _criar_lista.style.display = "";
@@ -290,8 +307,18 @@ window.addEventListener("load", function () {
         const myfile = input.files[0];
 
         if (myfile) {
-            await sasjs.uploadFile('services/common/createdata', [{ "file": myfile, "fileName": myfile.name }], { "tableName": tableName, "tableRef": tableRef }).then((res) => {
-                console.log(res);
+            await sasjs.uploadFile('services/common/createdata', [{ "file": myfile, "fileName": myfile.name }], { "tableName": tableName, "tableRef": tableRef }).then((response) => {
+                let responseJson;
+                try {
+                    responseJson = response;
+                } catch (e) {
+                    console.error(e);
+                }
+                if (responseJson && responseJson.status === 449) {
+                    createdata(name, input);
+                } else if (responseJson) {
+                    console.log(responseJson);
+                }
             });
         }
     }
