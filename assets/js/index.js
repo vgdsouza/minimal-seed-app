@@ -86,26 +86,26 @@ window.addEventListener("load", function () {
             const btnExcluirVoltar = document.querySelector("#excluir_lista button:last-child");
 
             btnVer.addEventListener("click", function () {
-                _spinner.style.display = "";
                 _listas.style.display = "none";
+                _spinner.style.display = "";
                 document.querySelector("#ver_lista > div > span").innerText = lista['LIST_NAME'];
                 getdata(btnVer.value);
             });
 
             btnVerVoltar.addEventListener("click", function () {
-                document.querySelector("#ver_lista").style.display = "none";
+                renderHome("#ver_lista", false);
                 _listas.style.display = "";
             })
 
             btnEditar.addEventListener("click", function () {
-                _spinner.style.display = "";
                 _listas.style.display = "none";
+                _spinner.style.display = "";
                 document.querySelector("#editar_lista > div > span").innerText = lista['LIST_NAME'];
                 renderUpdate(btnEditar.value);
             });
 
             btnEditarVoltar.addEventListener("click", function () {
-                document.querySelector("#editar_lista").style.display = "none";
+                renderHome("#editar_lista", false);
                 _listas.style.display = "";
             })
 
@@ -114,8 +114,7 @@ window.addEventListener("load", function () {
             });
 
             btnExcluirVoltar.addEventListener("click", function () {
-                document.querySelector("#excluir_lista").style.display = "none";
-                _listas.style.display = "";
+                renderHome("#excluir_lista", true);
             });
         })
 
@@ -127,7 +126,7 @@ window.addEventListener("load", function () {
         });
 
         btnCriarVoltar.addEventListener("click", function () {
-            document.querySelector("#criar_lista").style.display = "none";
+            renderHome("#criar_lista", false);
             _listas.style.display = "";
         });
 
@@ -185,24 +184,6 @@ window.addEventListener("load", function () {
 
         _spinner.style.display = "none";
         _ver_lista.style.display = "";
-    }
-
-    function clearTable(thead, tbody) {
-        if (!(thead === null)) {
-            while (thead.firstChild) {
-                thead.removeChild(thead.lastChild);
-            }
-        }
-
-        if (!(tbody === null)) {
-            while (tbody.firstChild) {
-                const lastRow = tbody.lastChild;
-                while (lastRow.firstChild) {
-                    lastRow.removeChild(lastRow.lastChild);
-                }
-                tbody.removeChild(tbody.lastChild);
-            }
-        }
     }
     /* GETDATA END */
 
@@ -320,9 +301,38 @@ window.addEventListener("load", function () {
             });
         }
 
-        document.querySelector("#criar_lista").style.display = "none";
-        _listas.style.display = "";
-        appinit();
+        renderHome("#criar_lista", true);
     }
     /* CREATEDATA END */
+
+
+    /* UTILITY */
+    function clearTable(thead, tbody) {
+        if (!(thead === null)) {
+            while (thead.firstChild) {
+                thead.removeChild(thead.lastChild);
+            }
+        }
+
+        if (!(tbody === null)) {
+            while (tbody.firstChild) {
+                const lastRow = tbody.lastChild;
+                while (lastRow.firstChild) {
+                    lastRow.removeChild(lastRow.lastChild);
+                }
+                tbody.removeChild(tbody.lastChild);
+            }
+        }
+    }
+
+    function renderHome(element, reload) {
+        document.querySelector(element).style.display = "none";
+
+        if (reload) {
+            _listas.style.display = "none";
+            _spinner.style.display = "";
+            appinit();
+        }
+    }
+    /* UTILITY END */
 });
