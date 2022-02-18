@@ -144,9 +144,7 @@ window.addEventListener("load", function () {
             } catch (e) {
                 console.error(e);
             }
-            if (responseJson && responseJson.status === 449) {
-                getdata(value);
-            } else if (responseJson && responseJson.lista) {
+            if (responseJson && responseJson.lista) {
                 createTableView(responseJson.lista);
             }
         });
@@ -228,9 +226,7 @@ window.addEventListener("load", function () {
                 } catch (e) {
                     console.error(e);
                 }
-                if (responseJson && responseJson.status === 449) {
-                    uploaddata(input, value);
-                } else if (responseJson) {
+                if (responseJson) {
                     console.log(responseJson);
                 }
             });
@@ -262,9 +258,7 @@ window.addEventListener("load", function () {
             } catch (e) {
                 console.error(e);
             }
-            if (responseJson && responseJson.status === 449) {
-                disabledata(value);
-            } else if (responseJson) {
+            if (responseJson) {
                 console.log(responseJson);
             }
         });
@@ -314,9 +308,7 @@ window.addEventListener("load", function () {
                 } catch (e) {
                     console.error(e);
                 }
-                if (responseJson && responseJson.status === 449) {
-                    createdata(name, input);
-                } else if (responseJson) {
+                if (responseJson) {
                     console.log(responseJson);
                 }
             });
