@@ -85,9 +85,6 @@ window.addEventListener("load", function () {
             const btnExcluir = document.querySelector(`#${lista['TABLE_REFERENCE']}_EXCLUIR`);
             const btnExcluirVoltar = document.querySelector("#excluir_lista button:last-child");
 
-            const btnCriar = document.querySelector("#criar_lista_btn");
-            const btnCriarVoltar = document.querySelector("#criar_lista button:last-child");
-
             btnVer.addEventListener("click", function () {
                 _spinner.style.display = "";
                 _listas.style.display = "none";
@@ -120,16 +117,22 @@ window.addEventListener("load", function () {
                 document.querySelector("#excluir_lista").style.display = "none";
                 _listas.style.display = "";
             });
-
-            btnCriar.addEventListener("click", function () {
-                renderCreate();
-            });
-
-            btnCriarVoltar.addEventListener("click", function () {
-                document.querySelector("#criar_lista").style.display = "none";
-                _listas.style.display = "";
-            });
         })
+
+        const btnCriar = document.querySelector("#criar_lista_btn");
+        const btnCriarVoltar = document.querySelector("#criar_lista button:last-child");
+
+        btnCriar.addEventListener("click", function () {
+            renderCreate();
+            document.querySelector("#criar_lista").style.display = "none";
+            _listas.style.display = "";
+            appinit();
+        });
+
+        btnCriarVoltar.addEventListener("click", function () {
+            document.querySelector("#criar_lista").style.display = "none";
+            _listas.style.display = "";
+        });
 
         _spinner.style.display = "none";
         _listas.style.display = "";
