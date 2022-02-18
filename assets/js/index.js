@@ -124,9 +124,6 @@ window.addEventListener("load", function () {
 
         btnCriar.addEventListener("click", function () {
             renderCreate();
-            document.querySelector("#criar_lista").style.display = "none";
-            _listas.style.display = "";
-            appinit();
         });
 
         btnCriarVoltar.addEventListener("click", function () {
@@ -322,6 +319,10 @@ window.addEventListener("load", function () {
                 }
             });
         }
+
+        document.querySelector("#criar_lista").style.display = "none";
+        _listas.style.display = "";
+        appinit();
     }
     /* CREATEDATA END */
 });
