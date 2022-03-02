@@ -70,6 +70,9 @@ window.addEventListener("load", function () {
             if (lista['TABLE_REFERENCE'] === "LISTA_PESSOA_NOME_CPF") {
                 td3.innerHTML = `<button id=\"${lista['TABLE_REFERENCE']}_EDITAR\" value=\"${lista['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/pen.svg\"></button>`;
                 td3.style.width = "0";
+            } else {
+                td3.innerHTML = `<button class=\"btn btn-secondary\" disabled><img src=\"assets/img/pen.svg\"></button>`;
+                td3.style.width = "0";
             }
 
             td4.innerHTML = `<button id=\"${lista['TABLE_REFERENCE']}_EXCLUIR\" value=\"${lista['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/trash.svg\"></button>`;
@@ -107,7 +110,7 @@ window.addEventListener("load", function () {
             });
 
             btnExcluirVoltar.addEventListener("click", function () {
-                renderHome("#excluir_lista", true);
+                renderHome("#excluir_lista", false);
             });
 
             if (lista['TABLE_REFERENCE'] === "LISTA_PESSOA_NOME_CPF") {
@@ -201,22 +204,31 @@ window.addEventListener("load", function () {
     /* UPLOADDATA */
     function renderUpdate(value) {
         const _editar_lista = document.querySelector("#editar_lista");
-        const _fileInput = document.querySelector("#editar_lista .input-group input");
-        const _btnEnviar = document.querySelector("#editar_lista .input-group button");
+        const _btnEnviar = document.querySelector("#editar_lista_enviar button");
 
         _btnEnviar.addEventListener("click", function () {
-            uploaddata(_fileInput, value);
+            uploaddata();
         });
 
         _spinner.style.display = "none";
         _editar_lista.style.display = "";
     }
 
-    async function uploaddata(input, value) {
-        const myfile = input.files[0];
+    async function uploaddata() {
+        const NOME = document.querySelector("#NOME");
+        const CPF_CNPJ = document.querySelector("#CPF_CNPJ");
+        const NOME_LISTA = document.querySelector("#NOME_LISTA");
+        const DADOS_ADICIONAIS = document.querySelector("#DADOS_ADICIONAIS");
+
+        let values = {
+            "NOME": NOME.value,
+            "CPF_CNPJ": CPF_CNPJ.value,
+            "NOME_LISTA": NOME_LISTA.value,
+            "DADOS_ADICIONAIS": DADOS_ADICIONAIS.value
+        }
 
         if (myfile) {
-            await sasjs.uploadFile('services/common/uploaddata', [{ "file": myfile, "fileName": myfile.name }], { "tableRef": value }).then((response) => {
+            await sasjs.uploadFile('services/common/uploaddata', undefined, values).then((response) => {
                 let responseJson;
                 try {
                     responseJson = response;
@@ -228,6 +240,8 @@ window.addEventListener("load", function () {
                 }
             });
         }
+
+        renderHome("#editar_lista", true);
     }
     /* UPLOADDATA END */
 
@@ -259,6 +273,8 @@ window.addEventListener("load", function () {
                 console.log(responseJson);
             }
         });
+
+        renderHome("#excluir_lista", true);
     }
     /* DISABLEDATA END */
 
