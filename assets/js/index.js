@@ -61,26 +61,31 @@ window.addEventListener("load", function () {
             const td2 = document.createElement("td");
             const td3 = document.createElement("td");
             const td4 = document.createElement("td");
+
             td1.innerText = lista['LIST_NAME'];
+
             td2.innerHTML = `<button id=\"${lista['TABLE_REFERENCE']}_VER\" value=\"${lista['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/eye.svg\"></button>`;
-            td3.innerHTML = `<button id=\"${lista['TABLE_REFERENCE']}_EDITAR\" value=\"${lista['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/pen.svg\"></button>`;
-            td4.innerHTML = `<button id=\"${lista['TABLE_REFERENCE']}_EXCLUIR\" value=\"${lista['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/trash.svg\"></button>`;
             td2.style.width = "0";
-            td3.style.width = "0";
+
+            if (lista['TABLE_REFERENCE'] === "LISTA_PESSOA_NOME_CPF") {
+                td3.innerHTML = `<button id=\"${lista['TABLE_REFERENCE']}_EDITAR\" value=\"${lista['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/pen.svg\"></button>`;
+                td3.style.width = "0";
+            }
+
+            td4.innerHTML = `<button id=\"${lista['TABLE_REFERENCE']}_EXCLUIR\" value=\"${lista['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/trash.svg\"></button>`;
             td4.style.width = "0";
+
             tr.appendChild(td1);
             tr.appendChild(td2);
             tr.appendChild(td3);
             tr.appendChild(td4);
+
             _tablebody.appendChild(tr);
         });
 
         listas.forEach((lista) => {
             const btnVer = document.querySelector(`#${lista['TABLE_REFERENCE']}_VER`);
             const btnVerVoltar = document.querySelector("#ver_lista button");
-
-            const btnEditar = document.querySelector(`#${lista['TABLE_REFERENCE']}_EDITAR`);
-            const btnEditarVoltar = document.querySelector("#editar_lista button");
 
             const btnExcluir = document.querySelector(`#${lista['TABLE_REFERENCE']}_EXCLUIR`);
             const btnExcluirVoltar = document.querySelector("#excluir_lista button:last-child");
@@ -97,18 +102,6 @@ window.addEventListener("load", function () {
                 _listas.style.display = "";
             })
 
-            btnEditar.addEventListener("click", function () {
-                _listas.style.display = "none";
-                _spinner.style.display = "";
-                document.querySelector("#editar_lista > div > span").innerText = lista['LIST_NAME'];
-                renderUpdate(btnEditar.value);
-            });
-
-            btnEditarVoltar.addEventListener("click", function () {
-                renderHome("#editar_lista", false);
-                _listas.style.display = "";
-            })
-
             btnExcluir.addEventListener("click", function () {
                 renderDelete(lista['LIST_NAME'], btnExcluir.value);
             });
@@ -116,6 +109,23 @@ window.addEventListener("load", function () {
             btnExcluirVoltar.addEventListener("click", function () {
                 renderHome("#excluir_lista", true);
             });
+
+            if (lista['TABLE_REFERENCE'] === "LISTA_PESSOA_NOME_CPF") {
+                const btnEditar = document.querySelector(`#${lista['TABLE_REFERENCE']}_EDITAR`);
+                const btnEditarVoltar = document.querySelector("#editar_lista button");
+
+                btnEditar.addEventListener("click", function () {
+                    _listas.style.display = "none";
+                    _spinner.style.display = "";
+                    document.querySelector("#editar_lista > div > span").innerText = lista['LIST_NAME'];
+                    renderUpdate(btnEditar.value);
+                });
+
+                btnEditarVoltar.addEventListener("click", function () {
+                    renderHome("#editar_lista", false);
+                    _listas.style.display = "";
+                })
+            }
         })
 
         const btnCriar = document.querySelector("#criar_lista_btn");
@@ -283,7 +293,7 @@ window.addEventListener("load", function () {
         }
 
         const tableName = name;
-        const tableRef = name_4;
+        const tableRef = name_5;
 
         const myfile = input.files[0];
 
