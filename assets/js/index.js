@@ -67,21 +67,27 @@ window.addEventListener("load", function () {
             td2.innerHTML = `<button id=\"${lista["TABLE_REFERENCE"]}_VER\" value=\"${lista["TABLE_REFERENCE"]}\" class=\"btn btn-secondary\"><img src=\"assets/img/eye.svg\"></button>`;
             td2.style.width = "0";
 
-            if (lista["TABLE_REFERENCE"] === "LISTA_PESSOA_NOME_CPF") {
-                td3.innerHTML = `<button id=\"${lista["TABLE_REFERENCE"]}_EDITAR\" value=\"${lista["TABLE_REFERENCE"]}\" class=\"btn btn-secondary\"><img src=\"assets/img/pen.svg\"></button>`;
-                td3.style.width = "0";
-            } else {
-                td3.innerHTML = `<button class=\"btn btn-secondary\" disabled><img src=\"assets/img/pen.svg\"></button>`;
-                td3.style.width = "0";
-            }
-
-            td4.innerHTML = `<button id=\"${lista["TABLE_REFERENCE"]}_EXCLUIR\" value=\"${lista["TABLE_REFERENCE"]}\" class=\"btn btn-secondary\"><img src=\"assets/img/trash.svg\"></button>`;
-            td4.style.width = "0";
-
             tr.appendChild(td1);
             tr.appendChild(td2);
-            tr.appendChild(td3);
-            tr.appendChild(td4);
+
+            if (lista["GERENTE"] !== "") {
+                const td3 = document.createElement("td");
+                const td4 = document.createElement("td");
+
+                if (lista["TABLE_REFERENCE"] === "LISTA_PESSOA_NOME_CPF") {
+                    td3.innerHTML = `<button id=\"${lista["TABLE_REFERENCE"]}_EDITAR\" value=\"${lista["TABLE_REFERENCE"]}\" class=\"btn btn-secondary\"><img src=\"assets/img/pen.svg\"></button>`;
+                    td3.style.width = "0";
+                } else {
+                    td3.innerHTML = `<button class=\"btn btn-secondary\" disabled><img src=\"assets/img/pen.svg\"></button>`;
+                    td3.style.width = "0";
+                }
+
+                td4.innerHTML = `<button id=\"${lista["TABLE_REFERENCE"]}_EXCLUIR\" value=\"${lista["TABLE_REFERENCE"]}\" class=\"btn btn-secondary\"><img src=\"assets/img/trash.svg\"></button>`;
+                td4.style.width = "0";
+
+                tr.appendChild(td3);
+                tr.appendChild(td4);
+            }
 
             _tablebody.appendChild(tr);
         });
@@ -105,29 +111,31 @@ window.addEventListener("load", function () {
                 _listas.style.display = "";
             })
 
-            btnExcluir.addEventListener("click", function () {
-                renderDelete(lista["LIST_NAME"], btnExcluir.value);
-            });
-
-            btnExcluirVoltar.addEventListener("click", function () {
-                renderHome("#excluir_lista", false);
-            });
-
-            if (lista["TABLE_REFERENCE"] === "LISTA_PESSOA_NOME_CPF") {
-                const btnEditar = document.querySelector(`#${lista["TABLE_REFERENCE"]}_EDITAR`);
-                const btnEditarVoltar = document.querySelector("#editar_lista button");
-
-                btnEditar.addEventListener("click", function () {
-                    _listas.style.display = "none";
-                    _spinner.style.display = "";
-                    document.querySelector("#editar_lista > div > span").innerText = lista["LIST_NAME"];
-                    renderUpdate(btnEditar.value);
+            if (lista["GERENTE"] !== "") {
+                btnExcluir.addEventListener("click", function () {
+                    renderDelete(lista["LIST_NAME"], btnExcluir.value);
                 });
 
-                btnEditarVoltar.addEventListener("click", function () {
-                    renderHome("#editar_lista", false);
-                    _listas.style.display = "";
-                })
+                btnExcluirVoltar.addEventListener("click", function () {
+                    renderHome("#excluir_lista", false);
+                });
+
+                if (lista["TABLE_REFERENCE"] === "LISTA_PESSOA_NOME_CPF") {
+                    const btnEditar = document.querySelector(`#${lista["TABLE_REFERENCE"]}_EDITAR`);
+                    const btnEditarVoltar = document.querySelector("#editar_lista button");
+
+                    btnEditar.addEventListener("click", function () {
+                        _listas.style.display = "none";
+                        _spinner.style.display = "";
+                        document.querySelector("#editar_lista > div > span").innerText = lista["LIST_NAME"];
+                        renderUpdate(btnEditar.value);
+                    });
+
+                    btnEditarVoltar.addEventListener("click", function () {
+                        renderHome("#editar_lista", false);
+                        _listas.style.display = "";
+                    })
+                }
             }
         })
 
