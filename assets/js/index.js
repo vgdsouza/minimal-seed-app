@@ -62,20 +62,20 @@ window.addEventListener("load", function () {
             const td3 = document.createElement("td");
             const td4 = document.createElement("td");
 
-            td1.innerText = lista['LIST_NAME'];
+            td1.innerText = lista["LIST_NAME"];
 
-            td2.innerHTML = `<button id=\"${lista['TABLE_REFERENCE']}_VER\" value=\"${lista['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/eye.svg\"></button>`;
+            td2.innerHTML = `<button id=\"${lista["TABLE_REFERENCE"]}_VER\" value=\"${lista["TABLE_REFERENCE"]}\" class=\"btn btn-secondary\"><img src=\"assets/img/eye.svg\"></button>`;
             td2.style.width = "0";
 
-            if (lista['TABLE_REFERENCE'] === "LISTA_PESSOA_NOME_CPF") {
-                td3.innerHTML = `<button id=\"${lista['TABLE_REFERENCE']}_EDITAR\" value=\"${lista['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/pen.svg\"></button>`;
+            if (lista["TABLE_REFERENCE"] === "LISTA_PESSOA_NOME_CPF") {
+                td3.innerHTML = `<button id=\"${lista["TABLE_REFERENCE"]}_EDITAR\" value=\"${lista["TABLE_REFERENCE"]}\" class=\"btn btn-secondary\"><img src=\"assets/img/pen.svg\"></button>`;
                 td3.style.width = "0";
             } else {
                 td3.innerHTML = `<button class=\"btn btn-secondary\" disabled><img src=\"assets/img/pen.svg\"></button>`;
                 td3.style.width = "0";
             }
 
-            td4.innerHTML = `<button id=\"${lista['TABLE_REFERENCE']}_EXCLUIR\" value=\"${lista['TABLE_REFERENCE']}\" class=\"btn btn-secondary\"><img src=\"assets/img/trash.svg\"></button>`;
+            td4.innerHTML = `<button id=\"${lista["TABLE_REFERENCE"]}_EXCLUIR\" value=\"${lista["TABLE_REFERENCE"]}\" class=\"btn btn-secondary\"><img src=\"assets/img/trash.svg\"></button>`;
             td4.style.width = "0";
 
             tr.appendChild(td1);
@@ -87,16 +87,16 @@ window.addEventListener("load", function () {
         });
 
         listas.forEach((lista) => {
-            const btnVer = document.querySelector(`#${lista['TABLE_REFERENCE']}_VER`);
+            const btnVer = document.querySelector(`#${lista["TABLE_REFERENCE"]}_VER`);
             const btnVerVoltar = document.querySelector("#ver_lista button");
 
-            const btnExcluir = document.querySelector(`#${lista['TABLE_REFERENCE']}_EXCLUIR`);
+            const btnExcluir = document.querySelector(`#${lista["TABLE_REFERENCE"]}_EXCLUIR`);
             const btnExcluirVoltar = document.querySelector("#excluir_lista button:last-child");
 
             btnVer.addEventListener("click", function () {
                 _listas.style.display = "none";
                 _spinner.style.display = "";
-                document.querySelector("#ver_lista > div > span").innerText = lista['LIST_NAME'];
+                document.querySelector("#ver_lista > div > span").innerText = lista["LIST_NAME"];
                 getdata(btnVer.value);
             });
 
@@ -106,21 +106,21 @@ window.addEventListener("load", function () {
             })
 
             btnExcluir.addEventListener("click", function () {
-                renderDelete(lista['LIST_NAME'], btnExcluir.value);
+                renderDelete(lista["LIST_NAME"], btnExcluir.value);
             });
 
             btnExcluirVoltar.addEventListener("click", function () {
                 renderHome("#excluir_lista", false);
             });
 
-            if (lista['TABLE_REFERENCE'] === "LISTA_PESSOA_NOME_CPF") {
-                const btnEditar = document.querySelector(`#${lista['TABLE_REFERENCE']}_EDITAR`);
+            if (lista["TABLE_REFERENCE"] === "LISTA_PESSOA_NOME_CPF") {
+                const btnEditar = document.querySelector(`#${lista["TABLE_REFERENCE"]}_EDITAR`);
                 const btnEditarVoltar = document.querySelector("#editar_lista button");
 
                 btnEditar.addEventListener("click", function () {
                     _listas.style.display = "none";
                     _spinner.style.display = "";
-                    document.querySelector("#editar_lista > div > span").innerText = lista['LIST_NAME'];
+                    document.querySelector("#editar_lista > div > span").innerText = lista["LIST_NAME"];
                     renderUpdate(btnEditar.value);
                 });
 
@@ -220,28 +220,30 @@ window.addEventListener("load", function () {
         const NOME_LISTA = document.querySelector("#NOME_LISTA");
         const DADOS_ADICIONAIS = document.querySelector("#DADOS_ADICIONAIS");
 
-        let values = {
-            "NOME": NOME.value,
-            "CPF_CNPJ": CPF_CNPJ.value,
-            "NOME_LISTA": NOME_LISTA.value,
-            "DADOS_ADICIONAIS": DADOS_ADICIONAIS.value
-        }
-
-        if (myfile) {
-            await sasjs.uploadFile('services/common/uploaddata', undefined, values).then((response) => {
-                let responseJson;
-                try {
-                    responseJson = response;
-                } catch (e) {
-                    console.error(e);
-                }
-                if (responseJson) {
-                    console.log(responseJson);
-                }
-            });
+        let dataObject = {
+            "fromjs": [{
+                "NOME": NOME.value,
+                "CPF_CNPJ": CPF_CNPJ.value,
+                "NOME_LISTA": NOME_LISTA.value,
+                "DADOS_ADICIONAIS": DADOS_ADICIONAIS.value
+            }]
         }
 
         renderHome("#editar_lista", true);
+
+        await sasjs.request("services/common/uploaddata", dataObject).then((response) => {
+            let responseJson;
+            try {
+                responseJson = response;
+            } catch (e) {
+                console.error(e);
+            }
+            if (responseJson) {
+                console.log(responseJson);
+            }
+        });
+
+        appinit();
     }
     /* UPLOADDATA END */
 
@@ -262,6 +264,8 @@ window.addEventListener("load", function () {
     }
 
     async function disabledata(value) {
+        renderHome("#excluir_lista", true);
+
         await sasjs.request("services/common/disabledata", { [value]: [{}] }).then((response) => {
             let responseJson;
             try {
@@ -274,7 +278,7 @@ window.addEventListener("load", function () {
             }
         });
 
-        renderHome("#excluir_lista", true);
+        appinit();
     }
     /* DISABLEDATA END */
 
@@ -313,8 +317,10 @@ window.addEventListener("load", function () {
 
         const myfile = input.files[0];
 
+        renderHome("#criar_lista", true);
+
         if (myfile) {
-            await sasjs.uploadFile('services/common/createdata', [{ "file": myfile, "fileName": myfile.name }], { "tableName": tableName, "tableRef": tableRef }).then((response) => {
+            await sasjs.uploadFile("services/common/createdata", [{ "file": myfile, "fileName": myfile.name }], { "tableName": tableName, "tableRef": tableRef }).then((response) => {
                 let responseJson;
                 try {
                     responseJson = response;
@@ -327,7 +333,7 @@ window.addEventListener("load", function () {
             });
         }
 
-        renderHome("#criar_lista", true);
+        appinit();
     }
     /* CREATEDATA END */
 
@@ -357,7 +363,6 @@ window.addEventListener("load", function () {
         if (reload) {
             _listas.style.display = "none";
             _spinner.style.display = "";
-            appinit();
         }
     }
     /* UTILITY END */
