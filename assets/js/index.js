@@ -215,21 +215,21 @@ window.addEventListener("load", function () {
         const _btnEnviar = document.querySelector("#editar_lista_enviar button");
 
         _btnEnviar.addEventListener("click", function () {
-            uploaddata();
+            uploaddata(value);
         });
 
         _spinner.style.display = "none";
         _editar_lista.style.display = "";
     }
 
-    async function uploaddata() {
+    async function uploaddata(value) {
         const NOME = document.querySelector("#NOME");
         const CPF_CNPJ = document.querySelector("#CPF_CNPJ");
         const NOME_LISTA = document.querySelector("#NOME_LISTA");
         const DADOS_ADICIONAIS = document.querySelector("#DADOS_ADICIONAIS");
 
         let dataObject = {
-            "fromjs": [{
+            [value]: [{
                 "NOME": NOME.value,
                 "CPF_CNPJ": CPF_CNPJ.value,
                 "NOME_LISTA": NOME_LISTA.value,
