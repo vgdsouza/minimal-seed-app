@@ -70,7 +70,7 @@ window.addEventListener("load", function () {
             tr.appendChild(td1);
             tr.appendChild(td2);
 
-            if (lista["GERENTE"] !== "") {
+            if (lista["GERENTE"] !== ".") {
                 const td3 = document.createElement("td");
                 const td4 = document.createElement("td");
 
@@ -111,7 +111,7 @@ window.addEventListener("load", function () {
                 _listas.style.display = "";
             })
 
-            if (lista["GERENTE"] !== "") {
+            if (lista["GERENTE"] !== ".") {
                 btnExcluir.addEventListener("click", function () {
                     renderDelete(lista["LIST_NAME"], btnExcluir.value);
                 });
@@ -361,15 +361,18 @@ window.addEventListener("load", function () {
         /** @type {HTMLDivElement} */
         const _toastButton = document.querySelector("#toast>.toast-header>.btn-close");
 
+        if (_toast.classList.contains("fadeOut")) {
+            _toast.classList.remove("fadeOut");
+        }
+
         _toast.style.display = "";
-        _toast.className = "";
         _toastBody.innerText = mensagem;
         _toastButton.addEventListener("click", () => {
             renderHome("#toast", false);
         });
 
         setTimeout(() => {
-            _toast.className = "fadeOut";
+            _toast.classList.add("fadeOut");
             setTimeout(() => {
                 renderHome("#toast", false);
             }, 2000);
