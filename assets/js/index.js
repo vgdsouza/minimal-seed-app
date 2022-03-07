@@ -248,7 +248,7 @@ window.addEventListener("load", function () {
                 console.error(e);
             }
             if (responseJson) {
-                mensagem = responseJson.resposta["texto"];
+                mensagem = responseJson.resposta[0]["TEXTO"];
             }
         });
 
@@ -276,6 +276,7 @@ window.addEventListener("load", function () {
     async function disabledata(value) {
         renderHome("#excluir_lista", true);
 
+        let mensagem = "";
         await sasjs.request("services/common/disabledata", { [value]: [{}] }).then((response) => {
             let responseJson;
             try {
@@ -284,7 +285,7 @@ window.addEventListener("load", function () {
                 console.error(e);
             }
             if (responseJson) {
-                mensagem = responseJson.resposta["texto"];
+                mensagem = responseJson.resposta[0]["TEXTO"];
             }
         });
 
@@ -330,6 +331,7 @@ window.addEventListener("load", function () {
 
         renderHome("#criar_lista", true);
 
+        let mensagem = "";
         if (myfile) {
             await sasjs.uploadFile("services/common/createdata", [{ "file": myfile, "fileName": myfile.name }], { "tableName": tableName, "tableRef": tableRef }).then((response) => {
                 let responseJson;
@@ -339,7 +341,7 @@ window.addEventListener("load", function () {
                     console.error(e);
                 }
                 if (responseJson) {
-                    mensagem = responseJson.resposta["texto"];
+                    mensagem = responseJson.resposta[0]["TEXTO"];
                 }
             });
         }
@@ -360,6 +362,7 @@ window.addEventListener("load", function () {
         const _toastButton = document.querySelector("#toast>.toast-header>.btn-close");
 
         _toast.style.display = "";
+        _toast.className = "";
         _toastBody.innerText = mensagem;
         _toastButton.addEventListener("click", () => {
             renderHome("#toast", false);
