@@ -111,9 +111,26 @@
                 <label class="form-label">CPF/CNPJ</label>
                 <input id="CPF_CNPJ" type="text" class="form-control">
                 <label class="form-label">Lista</label>
-                <input id="NOME_LISTA" type="text" class="form-control">
+                <select id="NOME_LISTA" class="form-control">
+                    <option value="PEP_AML">LISTA PEP AML</option>
+                    <option value="PEP_SISCOAF">LISTA PEP SISCOAF</option>
+                    <option value="PEP_SERASA">LISTA PEP SERASA</option>
+                    <option value="CEIS">LISTA CEIS</option>
+                    <option value="TRABALHO_ESCRAVO">LISTA TRABALHO ESCRAVO</option>
+                    <option value="OFAC_SDN">LISTA OFAC SDN</option>
+                    <option value="OFAC_CONSOLIDADA">LISTA OFAC CONSOLIDADA</option>
+                    <option value="ONU">LISTA ONU</option>
+                    <option value="UK">LISTA UK</option>
+                    <option value="UNIAO_EUROPEIA">LISTA UNIÃO EUROPEIA </option>
+                    <option value="CSNU">LISTA CSNU</option>
+                    <option value="FBI">LISTA FBI</option>
+                    <option value="FRANCA">LISTA DA FRANÇA</option>
+                    <option value="INTERPOL">LISTA INTERPOL</option>
+                    <option value="COMUNICADOS_COAF">COMUNICADO AO COAF</option>
+                    <option value="RESTRITIVO_INTERNO">RESTRITIVO INTERNO</option>
+                </select>
                 <label class="form-label">Dados Adicionais</label>
-                <input id="DADOS_ADICIONAIS" type="text" class="form-control">
+                <textarea id="DADOS_ADICIONAIS" class="form-control"></textarea>
                 <div class="myflex">
                     <button class="btn btn-success">Enviar</button>
                 </div>
