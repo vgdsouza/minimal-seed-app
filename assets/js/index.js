@@ -59,8 +59,6 @@ window.addEventListener("load", function () {
             const tr = document.createElement("tr");
             const td1 = document.createElement("td");
             const td2 = document.createElement("td");
-            const td3 = document.createElement("td");
-            const td4 = document.createElement("td");
 
             td1.innerText = lista["LIST_NAME"];
 
