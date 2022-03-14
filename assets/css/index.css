@@ -92,8 +92,13 @@ svg {
     justify-content: center;
 }
 
-#editar_lista_enviar>input {
+#editar_lista_enviar>input,
+#editar_lista_enviar>select {
     margin-bottom: 1rem;
+}
+
+#editar_lista_enviar>textarea {
+    height: 8rem;
 }
 
 #criar_lista,

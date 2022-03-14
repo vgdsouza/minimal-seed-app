@@ -16,6 +16,7 @@ window.addEventListener("load", function () {
         loginMechanism: "Redirected"
     });
 
+    /*
     async function checkUserLoggedIn() {
         await sasjs.checkSession().then((response) => {
             let responseJson;
@@ -34,9 +35,13 @@ window.addEventListener("load", function () {
     }
 
     checkUserLoggedIn();
+    */
+
+    appinit();
 
     /* APPINIT */
     async function appinit() {
+        /*
         await sasjs.request("services/common/appinit", null).then((response) => {
             let responseJson;
             try {
@@ -50,6 +55,8 @@ window.addEventListener("load", function () {
                 createTableListas(responseJson.listas);
             }
         });
+        */
+        createTableListas(exemplo.listas);
     }
 
     function createTableListas(listas) {
@@ -232,7 +239,7 @@ window.addEventListener("load", function () {
             [value]: [{
                 "NOME": NOME.value,
                 "CPF_CNPJ": CPF_CNPJ.value,
-                "NOME_LISTA": NOME_LISTA.value,
+                "NOME_LISTA": NOME_LISTA.options[NOME_LISTA.selectedIndex].value,
                 "DADOS_ADICIONAIS": DADOS_ADICIONAIS.value
             }]
         }
@@ -328,22 +335,26 @@ window.addEventListener("load", function () {
         const tableRef = name_5;
 
         const myfile = input.files[0];
+        const myregex = /\.(csv|xlsx)$/;
+        const mymatch = myfile.name.match(myregex)[1];
 
         renderHome("#criar_lista", true);
 
         let mensagem = "";
         if (myfile) {
-            await sasjs.uploadFile("services/common/createdata", [{ "file": myfile, "fileName": myfile.name }], { "tableName": tableName, "tableRef": tableRef }).then((response) => {
-                let responseJson;
-                try {
-                    responseJson = response;
-                } catch (e) {
-                    console.error(e);
-                }
-                if (responseJson) {
-                    mensagem = responseJson.resposta[0]["TEXTO"];
-                }
-            });
+            if (mymatch === "csv" || mymatch === "xlsx") {
+                await sasjs.uploadFile("services/common/createdata", [{ "file": myfile, "fileName": myfile.name }], { "tableName": tableName, "tableRef": tableRef, "fileType": mymatch }).then((response) => {
+                    let responseJson;
+                    try {
+                        responseJson = response;
+                    } catch (e) {
+                        console.error(e);
+                    }
+                    if (responseJson) {
+                        mensagem = responseJson.resposta[0]["TEXTO"];
+                    }
+                });
+            }
         }
 
         appinit();
