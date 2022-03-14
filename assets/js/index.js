@@ -16,7 +16,6 @@ window.addEventListener("load", function () {
         loginMechanism: "Redirected"
     });
 
-    /*
     async function checkUserLoggedIn() {
         await sasjs.checkSession().then((response) => {
             let responseJson;
@@ -35,13 +34,9 @@ window.addEventListener("load", function () {
     }
 
     checkUserLoggedIn();
-    */
-
-    appinit();
 
     /* APPINIT */
     async function appinit() {
-        /*
         await sasjs.request("services/common/appinit", null).then((response) => {
             let responseJson;
             try {
@@ -55,8 +50,6 @@ window.addEventListener("load", function () {
                 createTableListas(responseJson.listas);
             }
         });
-        */
-        createTableListas(exemplo.listas);
     }
 
     function createTableListas(listas) {
