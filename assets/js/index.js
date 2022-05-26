@@ -16,6 +16,7 @@ window.addEventListener("load", function () {
     loginMechanism: "Redirected",
   });
 
+  /*
   async function checkUserLoggedIn() {
     await sasjs.checkSession().then((response) => {
       let responseJson;
@@ -34,8 +35,10 @@ window.addEventListener("load", function () {
   }
 
   checkUserLoggedIn();
+  */
 
   /* APPINIT */
+  /*
   async function appinit() {
     await sasjs.request("services/common/appinit", null).then((response) => {
       let responseJson;
@@ -51,8 +54,18 @@ window.addEventListener("load", function () {
       }
     });
   }
+  */
+
+  createTableListas(appinit_json.listas);
 
   function createTableListas(listas) {
+    const listas_permitidas = [
+      "LISTA_PESSOA_NOME_CPF",
+      "LISTA_WHITE_LIST",
+      "LISTA_COMUNICADOS_COAF",
+      "LISTA_RESTRITIVO_INTERNO",
+    ];
+
     clearTable(null, _tablebody);
 
     listas.forEach((lista) => {
@@ -71,13 +84,6 @@ window.addEventListener("load", function () {
       if (lista["GERENTE"] !== ".") {
         const td3 = document.createElement("td");
         const td4 = document.createElement("td");
-
-        const listas_permitidas = [
-          "LISTA_PESSOA_NOME_CPF",
-          "LISTA_WHITE_LIST",
-          "LISTA_COMUNICADOS_COAF",
-          "LISTA_RESTRITIVO_INTERNO",
-        ];
 
         if (listas_permitidas.indexOf(lista["TABLE_REFERENCE"]) > -1) {
           td3.innerHTML = `<button id=\"${lista["TABLE_REFERENCE"]}_EDITAR\" value=\"${lista["TABLE_REFERENCE"]}\" class=\"btn btn-success\"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32zM421.7 220.3L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3z"/></svg></button>`;
@@ -130,12 +136,9 @@ window.addEventListener("load", function () {
           renderHome("#excluir_lista", false);
         });
 
-        if (lista["TABLE_REFERENCE"] === "LISTA_PESSOA_NOME_CPF") {
+        if (listas_permitidas.indexOf(lista["TABLE_REFERENCE"]) > -1) {
           const btnEditar = document.querySelector(
             `#${lista["TABLE_REFERENCE"]}_EDITAR`
-          );
-          const btnEditarVoltar = document.querySelector(
-            "#editar_lista button"
           );
 
           btnEditar.addEventListener("click", function () {
@@ -145,13 +148,22 @@ window.addEventListener("load", function () {
               lista["LIST_NAME"];
             renderUpdate(btnEditar.value);
           });
-
-          btnEditarVoltar.addEventListener("click", function () {
-            renderHome("#editar_lista", false);
-            _listas.style.display = "";
-          });
         }
       }
+    });
+
+    const btnEditarVoltar = document.querySelector("#editar_lista button");
+
+    btnEditarVoltar.addEventListener("click", function () {
+      const _btnEnviar = document.querySelector("#editar_lista_enviar button");
+      _btnEnviar.removeEventListener("click", uploaddata);
+
+      renderHome("#editar_lista", false);
+      _listas.style.display = "";
+
+      listas_permitidas.forEach((e) => {
+        document.querySelector(`#${e}`).style.display = "none";
+      });
     });
 
     const btnCriar = document.querySelector("#criar_lista_btn");
@@ -228,53 +240,111 @@ window.addEventListener("load", function () {
 
   /* UPLOADDATA */
   function renderUpdate(value) {
-    const _editar_lista = document.querySelector("#editar_lista");
     const _btnEnviar = document.querySelector("#editar_lista_enviar button");
+    const _editar_lista = document.querySelector("#editar_lista");
+    const _form_lista = document.querySelector(`#${value}`);
 
-    _btnEnviar.addEventListener("click", function () {
-      uploaddata(value);
-    });
+    _btnEnviar.value = value;
+    _btnEnviar.addEventListener("click", uploaddata);
 
     _spinner.style.display = "none";
     _editar_lista.style.display = "";
+    _form_lista.style.display = "";
   }
 
-  async function uploaddata(value) {
-    const NOME = document.querySelector("#NOME");
-    const CPF_CNPJ = document.querySelector("#CPF_CNPJ");
-    const NOME_LISTA = document.querySelector("#NOME_LISTA");
-    const DADOS_ADICIONAIS = document.querySelector("#DADOS_ADICIONAIS");
+  async function uploaddata() {
+    const value = document.querySelector("#editar_lista_enviar button").value;
 
-    let dataObject = {
-      [value]: [
-        {
-          NOME: NOME.value,
-          CPF_CNPJ: CPF_CNPJ.value,
-          NOME_LISTA: NOME_LISTA.options[NOME_LISTA.selectedIndex].value,
-          DADOS_ADICIONAIS: DADOS_ADICIONAIS.value,
-        },
-      ],
-    };
+    const _input = document.querySelectorAll(`#${value} input`);
+    const _select = document.querySelectorAll(`#${value} select`);
+    const _textarea = document.querySelectorAll(`#${value} textarea`);
 
-    renderHome("#editar_lista", true);
-
+    let dataObject = { [value]: [{}] };
     let mensagem = "";
-    await sasjs
-      .request("services/common/uploaddata", dataObject)
-      .then((response) => {
-        let responseJson;
-        try {
-          responseJson = response;
-        } catch (e) {
-          console.error(e);
-        }
-        if (responseJson) {
-          mensagem = responseJson.resposta[0]["TEXTO"];
-        }
-      });
 
-    appinit();
-    toast(mensagem);
+    let cidade = "";
+    let uf = "";
+
+    let erro = false;
+
+    _input.forEach((e) => {
+      if (e.type === "checkbox" && e.checked) {
+        if (dataObject[value][0][e.name]) {
+          dataObject[value][0][e.name] = `${dataObject[value][0][e.name]},${
+            e.value
+          }`;
+        } else {
+          dataObject[value][0][e.name] = e.value;
+        }
+      } else if (
+        e.type !== "checkbox" &&
+        e.name !== "CIDADE" &&
+        e.name !== "UF" &&
+        e.name !== "CPF_CNPJ"
+      ) {
+        dataObject[value][0][e.name] = e.value;
+      } else if (e.name === "CPF_CNPJ") {
+        const cpf_cnpj = e.value.replace(/[^0-9]/gm, "");
+
+        if (cpf_cnpj.length !== 11 && cpf_cnpj.length !== 14) {
+          mensagem = "CPF/CNPJ inválido!";
+          erro = true;
+        } else {
+          dataObject[value][0]["CPF_CNPJ"] = cpf_cnpj;
+
+          if (value === "LISTA_COMUNICADOS_COAF") {
+            if (cpf_cnpj.length === 11) {
+              dataObject[value][0]["PF_PJ"] = "PF";
+            } else {
+              dataObject[value][0]["PF_PJ"] = "PJ";
+            }
+          }
+        }
+      } else if (e.name === "CIDADE") {
+        cidade = e.value;
+      } else if (e.name === "UF") {
+        uf = e.value;
+      }
+    });
+
+    if (cidade !== "" && uf !== "") {
+      dataObject[value][0]["CIDADE_UF"] = `${cidade} - ${uf}`;
+    }
+
+    _select.forEach((e) => {
+      dataObject[value][0][e.name] = e.options[e.selectedIndex].value;
+    });
+
+    _textarea.forEach((e) => {
+      dataObject[value][0][e.name] = e.value;
+    });
+
+    console.log(dataObject);
+
+    if (erro) {
+      toast(mensagem);
+    } else {
+      renderHome("#editar_lista", true);
+
+      /*
+      await sasjs
+        .request("services/common/uploaddata", dataObject)
+        .then((response) => {
+          let responseJson;
+          try {
+            responseJson = response;
+          } catch (e) {
+            console.error(e);
+          }
+          if (responseJson) {
+            mensagem = responseJson.resposta[0]["TEXTO"];
+          }
+        });
+
+      appinit();
+      */
+      toast(mensagem);
+    }
   }
   /* UPLOADDATA END */
 
@@ -445,3 +515,23 @@ window.addEventListener("load", function () {
   }
   /* UTILITY END */
 });
+
+const appinit_json = {
+  listas: [
+    {
+      LIST_NAME: "PESSOA EM LISTA",
+      TABLE_REFERENCE: "LISTA_PESSOA_NOME_CPF",
+    },
+    { LIST_NAME: "WHITE LIST", TABLE_REFERENCE: "LISTA_WHITE_LIST" },
+    {
+      LIST_NAME: "COMUNICADOS AO COAF",
+      TABLE_REFERENCE: "LISTA_COMUNICADOS_COAF",
+    },
+    {
+      LIST_NAME: "RESTRITIVO INTERNO",
+      TABLE_REFERENCE: "LISTA_RESTRITIVO_INTERNO",
+    },
+    { LIST_NAME: "CEIS", TABLE_REFERENCE: "LISTA_CEIS" },
+    { LIST_NAME: "CNAE", TABLE_REFERENCE: "LISTA_CNAE" },
+  ],
+};
