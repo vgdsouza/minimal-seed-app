@@ -72,7 +72,14 @@ window.addEventListener("load", function () {
         const td3 = document.createElement("td");
         const td4 = document.createElement("td");
 
-        if (lista["TABLE_REFERENCE"] === "LISTA_PESSOA_NOME_CPF") {
+        const listas_permitidas = [
+          "LISTA_PESSOA_NOME_CPF",
+          "LISTA_WHITE_LIST",
+          "LISTA_COMUNICADOS_COAF",
+          "LISTA_RESTRITIVO_INTERNO",
+        ];
+
+        if (listas_permitidas.indexOf(lista["TABLE_REFERENCE"]) > -1) {
           td3.innerHTML = `<button id=\"${lista["TABLE_REFERENCE"]}_EDITAR\" value=\"${lista["TABLE_REFERENCE"]}\" class=\"btn btn-success\"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M362.7 19.32C387.7-5.678 428.3-5.678 453.3 19.32L492.7 58.75C517.7 83.74 517.7 124.3 492.7 149.3L444.3 197.7L314.3 67.72L362.7 19.32zM421.7 220.3L188.5 453.4C178.1 463.8 165.2 471.5 151.1 475.6L30.77 511C22.35 513.5 13.24 511.2 7.03 504.1C.8198 498.8-1.502 489.7 .976 481.2L36.37 360.9C40.53 346.8 48.16 333.9 58.57 323.5L291.7 90.34L421.7 220.3z"/></svg></button>`;
           td3.style.width = "0";
         } else {
@@ -438,33 +445,3 @@ window.addEventListener("load", function () {
   }
   /* UTILITY END */
 });
-
-var exemplo = {
-  START_DTTM: "15FEB22:12:53:46.342",
-  listas: [
-    { LIST_NAME: "CEIS", TABLE_REFERENCE: "LISTA_CEIS" },
-    { LIST_NAME: "CNAE", TABLE_REFERENCE: "LISTA_CNAE" },
-    {
-      LIST_NAME: "GAFI (IN PROGRESS)",
-      TABLE_REFERENCE: "LISTA_GAFI_IN_PROGRESS",
-    },
-    { LIST_NAME: "IBAMA", TABLE_REFERENCE: "LISTA_IBAMA" },
-    { LIST_NAME: "PESSOA/NOME/CPF", TABLE_REFERENCE: "LISTA_PESSOA_NOME_CPF" },
-    { LIST_NAME: "UK BANK", TABLE_REFERENCE: "LISTA_UK_BANCO" },
-    { LIST_NAME: "UNIAO EUROPEIA", TABLE_REFERENCE: "LISTA_UNIAO_EUROPEIA" },
-  ],
-  SYSUSERID: "visouz",
-  MF_GETUSER: "visouz",
-  SYS_JES_JOB_URI: "/jobExecution/jobs/f43475ed-c4d3-423b-bdac-15ebb35bd1e5",
-  SYSJOBID: "1922922",
-  _DEBUG: "",
-  _PROGRAM: "/Public/app/ICL/services/common/appinit",
-  SYSCC: "0",
-  SYSERRORTEXT: "",
-  SYSHOSTNAME: "bpn09au",
-  SYSSCPL: "Linux",
-  SYSSITE: "70288264",
-  SYSVLONG: "V.03.05M0P111119",
-  SYSWARNINGTEXT: "",
-  END_DTTM: "15FEB22:12:53:46.420",
-};
