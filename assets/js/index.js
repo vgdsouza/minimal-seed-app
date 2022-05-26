@@ -16,7 +16,6 @@ window.addEventListener("load", function () {
     loginMechanism: "Redirected",
   });
 
-  /*
   async function checkUserLoggedIn() {
     await sasjs.checkSession().then((response) => {
       let responseJson;
@@ -35,10 +34,8 @@ window.addEventListener("load", function () {
   }
 
   checkUserLoggedIn();
-  */
 
   /* APPINIT */
-  /*
   async function appinit() {
     await sasjs.request("services/common/appinit", null).then((response) => {
       let responseJson;
@@ -54,9 +51,6 @@ window.addEventListener("load", function () {
       }
     });
   }
-  */
-
-  createTableListas(appinit_json.listas);
 
   function createTableListas(listas) {
     const listas_permitidas = [
@@ -326,7 +320,6 @@ window.addEventListener("load", function () {
     } else {
       renderHome("#editar_lista", true);
 
-      /*
       await sasjs
         .request("services/common/uploaddata", dataObject)
         .then((response) => {
@@ -342,7 +335,6 @@ window.addEventListener("load", function () {
         });
 
       appinit();
-      */
       toast(mensagem);
     }
   }
@@ -515,23 +507,3 @@ window.addEventListener("load", function () {
   }
   /* UTILITY END */
 });
-
-const appinit_json = {
-  listas: [
-    {
-      LIST_NAME: "PESSOA EM LISTA",
-      TABLE_REFERENCE: "LISTA_PESSOA_NOME_CPF",
-    },
-    { LIST_NAME: "WHITE LIST", TABLE_REFERENCE: "LISTA_WHITE_LIST" },
-    {
-      LIST_NAME: "COMUNICADOS AO COAF",
-      TABLE_REFERENCE: "LISTA_COMUNICADOS_COAF",
-    },
-    {
-      LIST_NAME: "RESTRITIVO INTERNO",
-      TABLE_REFERENCE: "LISTA_RESTRITIVO_INTERNO",
-    },
-    { LIST_NAME: "CEIS", TABLE_REFERENCE: "LISTA_CEIS" },
-    { LIST_NAME: "CNAE", TABLE_REFERENCE: "LISTA_CNAE" },
-  ],
-};
