@@ -177,6 +177,8 @@ window.addEventListener("load", function () {
     const btnBuscaUnificada = document.querySelector("#busca_unificada_btn");
 
     btnBuscaUnificada.addEventListener("click", function () {
+      _listas.style.display = "none";
+      _spinner.style.display = "";
       busca_unificada_func();
     });
 
@@ -602,7 +604,7 @@ window.addEventListener("load", function () {
       const hr = document.createElement("hr");
       const br = document.createElement("br");
 
-      const _div = createElement("div");
+      const _div = document.createElement("div");
       _div.style.width = "100%";
       _div.style.display = "block";
       _div.style.overflowX = "scroll";
