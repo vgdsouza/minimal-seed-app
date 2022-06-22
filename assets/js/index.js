@@ -582,10 +582,12 @@ window.addEventListener("load", function () {
         nome: "Mídias Desabonadoras",
         valor: lista?.pessoa_noticias,
       },
+      /*
       {
         nome: "Restritiva Internacional",
         valor: lista?.restritiva_internacional,
       },
+      */
       {
         nome: "Restritiva Nacional",
         valor: lista?.restritiva_nacional,
@@ -605,7 +607,7 @@ window.addEventListener("load", function () {
     listas.forEach((list) => {
       const strong = document.createElement("strong");
       strong.innerText = list?.nome;
-      strong.style.color = "red";
+      strong.style.color = "#198754";
 
       const hr = document.createElement("hr");
       const br = document.createElement("br");
@@ -644,13 +646,14 @@ window.addEventListener("load", function () {
         tabelas_div.appendChild(strong);
         tabelas_div.appendChild(table);
         tabelas_div.appendChild(br);
+        tabelas_div.appendChild(br);
       }
     });
 
-    const buscaUnificada = document.querySelector("#busca_unificada");
+    const verBuscaUnificada = document.querySelector("#ver_busca_unificada");
 
     _listas.style.display = "none";
-    buscaUnificada.style.display = "";
+    verBuscaUnificada.style.display = "";
   }
   /* BUSCA UNIFICADA END */
 });
