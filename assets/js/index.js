@@ -605,6 +605,8 @@ window.addEventListener("load", function () {
     listas.forEach((list) => {
       const strong = document.createElement("strong");
       strong.innerText = list?.nome;
+      strong.style.color = "red";
+
       const hr = document.createElement("hr");
       const br = document.createElement("br");
       const table = document.createElement("table");
@@ -638,8 +640,8 @@ window.addEventListener("load", function () {
         thead.appendChild(th_row);
         table.appendChild(thead);
         table.appendChild(tbody);
-        tabelas_div.appendChild(strong);
         tabelas_div.appendChild(hr);
+        tabelas_div.appendChild(strong);
         tabelas_div.appendChild(table);
         tabelas_div.appendChild(br);
       }
