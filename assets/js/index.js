@@ -518,8 +518,10 @@ window.addEventListener("load", function () {
     cpf_cnpj = cpf_cnpj.replace(/[^0-9]/gm, "");
 
     if (cpf_cnpj.length === 11 || cpf_cnpj.length === 14) {
+      let dataObject = { fromjs: [{ cpf: cpf_cnpj }] };
+
       await sasjs
-        .request("jobs/buscaunificada", { [value]: [{}] })
+        .request("jobs/buscaunificada", dataObject)
         .then((response) => {
           let responseJson;
           try {
@@ -612,36 +614,40 @@ window.addEventListener("load", function () {
       const tbody = document.createElement("tbody");
 
       const th_row = document.createElement("tr");
-      const colunas = Object.keys(list?.valor[0]);
 
-      colunas.forEach((col) => {
-        const th = document.createElement("th");
-        th.scope = "col";
-        th.innerText = col;
-        th_row.appendChild(th);
-      });
+      if (list?.valor[0]) {
+        const colunas = Object.keys(list?.valor[0]);
 
-      list.valor.forEach((linha) => {
-        const tr = document.createElement("tr");
         colunas.forEach((col) => {
-          const td = document.createElement("td");
-          td.innerText = linha[col];
-          tr.appendChild(td);
+          const th = document.createElement("th");
+          th.scope = "col";
+          th.innerText = col;
+          th_row.appendChild(th);
         });
-        tbody.appendChild(tr);
-      });
 
-      thead.appendChild(th_row);
-      table.appendChild(thead);
-      table.appendChild(tbody);
-      tabelas_div.appendChild(strong);
-      tabelas_div.appendChild(hr);
-      tabelas_div.appendChild(table);
-      tabelas_div.appendChild(br);
+        list.valor.forEach((linha) => {
+          const tr = document.createElement("tr");
+          colunas.forEach((col) => {
+            const td = document.createElement("td");
+            td.innerText = linha[col];
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+
+        thead.appendChild(th_row);
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        tabelas_div.appendChild(strong);
+        tabelas_div.appendChild(hr);
+        tabelas_div.appendChild(table);
+        tabelas_div.appendChild(br);
+      }
     });
 
     const buscaUnificada = document.querySelector("#busca_unificada");
-    _spinner.style.display = "none";
+
+    _listas.style.display = "none";
     buscaUnificada.style.display = "";
   }
   /* BUSCA UNIFICADA END */
