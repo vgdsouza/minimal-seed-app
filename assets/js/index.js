@@ -543,16 +543,8 @@ window.addEventListener("load", function () {
         valor: lista?.contas_encerradas,
       },
       {
-        nome: "Novos Clientes",
-        valor: lista?.novos_clientes,
-      },
-      {
         nome: "Comunicados ao Coaf",
         valor: lista?.comunicados_coaf,
-      },
-      {
-        nome: "Indice Internacional",
-        valor: lista?.indice_internacional,
       },
       {
         nome: "Pep Aml",
@@ -582,12 +574,10 @@ window.addEventListener("load", function () {
         nome: "Mídias Desabonadoras",
         valor: lista?.pessoa_noticias,
       },
-      /*
       {
         nome: "Restritiva Internacional",
         valor: lista?.restritiva_internacional,
       },
-      */
       {
         nome: "Restritiva Nacional",
         valor: lista?.restritiva_nacional,
@@ -607,16 +597,20 @@ window.addEventListener("load", function () {
     listas.forEach((list) => {
       const strong = document.createElement("strong");
       strong.innerText = list?.nome;
-      strong.style.color = "#198754";
+      strong.style.color = "#1e7e34";
 
       const hr = document.createElement("hr");
       const br = document.createElement("br");
+
       const table = document.createElement("table");
       table.classList.add("table");
       table.classList.add("table-hover");
-      const thead = document.createElement("thead");
-      const tbody = document.createElement("tbody");
+      table.classList.add("table-striped");
 
+      const thead = document.createElement("thead");
+      thead.classList.add("thead-dark");
+
+      const tbody = document.createElement("tbody");
       const th_row = document.createElement("tr");
 
       if (list?.valor[0]) {
