@@ -602,14 +602,17 @@ window.addEventListener("load", function () {
       const hr = document.createElement("hr");
       const br = document.createElement("br");
 
+      const _div = createElement("div");
+      _div.style.width = "100%";
+      _div.style.display = "block";
+      _div.style.overflowX = "scroll";
+
       const table = document.createElement("table");
       table.classList.add("table");
       table.classList.add("table-hover");
       table.classList.add("table-striped");
 
       const thead = document.createElement("thead");
-      thead.classList.add("thead-dark");
-
       const tbody = document.createElement("tbody");
       const th_row = document.createElement("tr");
 
