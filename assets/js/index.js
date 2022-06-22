@@ -37,7 +37,7 @@ window.addEventListener("load", function () {
 
   /* APPINIT */
   async function appinit() {
-    await sasjs.request("services/common/appinit", null).then((response) => {
+    await sasjs.request("jobs/appinit", null).then((response) => {
       let responseJson;
       try {
         responseJson = response;
@@ -174,6 +174,12 @@ window.addEventListener("load", function () {
       _listas.style.display = "";
     });
 
+    const btnBuscaUnificada = document.querySelector("#busca_unificada_btn");
+
+    btnBuscaUnificada.addEventListener("click", function () {
+      busca_unificada_func();
+    });
+
     _spinner.style.display = "none";
     _listas.style.display = "";
   }
@@ -181,19 +187,17 @@ window.addEventListener("load", function () {
 
   /* GETDATA */
   async function getdata(value) {
-    await sasjs
-      .request("services/common/getdata", { [value]: [{}] })
-      .then((response) => {
-        let responseJson;
-        try {
-          responseJson = response;
-        } catch (e) {
-          console.error(e);
-        }
-        if (responseJson && responseJson.lista) {
-          createTableView(responseJson.lista);
-        }
-      });
+    await sasjs.request("jobs/getdata", { [value]: [{}] }).then((response) => {
+      let responseJson;
+      try {
+        responseJson = response;
+      } catch (e) {
+        console.error(e);
+      }
+      if (responseJson && responseJson.lista) {
+        createTableView(responseJson.lista);
+      }
+    });
   }
 
   function createTableView(lista) {
@@ -320,19 +324,17 @@ window.addEventListener("load", function () {
     } else {
       renderHome("#editar_lista", true);
 
-      await sasjs
-        .request("services/common/uploaddata", dataObject)
-        .then((response) => {
-          let responseJson;
-          try {
-            responseJson = response;
-          } catch (e) {
-            console.error(e);
-          }
-          if (responseJson) {
-            mensagem = responseJson.resposta[0]["TEXTO"];
-          }
-        });
+      await sasjs.request("jobs/uploaddata", dataObject).then((response) => {
+        let responseJson;
+        try {
+          responseJson = response;
+        } catch (e) {
+          console.error(e);
+        }
+        if (responseJson) {
+          mensagem = responseJson.resposta[0]["TEXTO"];
+        }
+      });
 
       appinit();
       toast(mensagem);
@@ -362,7 +364,7 @@ window.addEventListener("load", function () {
 
     let mensagem = "";
     await sasjs
-      .request("services/common/disabledata", { [value]: [{}] })
+      .request("jobs/disabledata", { [value]: [{}] })
       .then((response) => {
         let responseJson;
         try {
@@ -425,7 +427,7 @@ window.addEventListener("load", function () {
       if (mymatch === "csv" || mymatch === "xlsx") {
         await sasjs
           .uploadFile(
-            "services/common/createdata",
+            "jobs/createdata",
             [{ file: myfile, fileName: myfile.name }],
             { tableName: tableName, tableRef: tableRef, fileType: mymatch }
           )
@@ -506,4 +508,141 @@ window.addEventListener("load", function () {
     }
   }
   /* UTILITY END */
+
+  /* BUSCA UNIFICADA */
+  async function busca_unificada_func() {
+    const buscaUnificada = document.querySelector("#busca_unificada");
+
+    let cpf_cnpj = buscaUnificada.value;
+
+    cpf_cnpj = cpf_cnpj.replace(/[^0-9]/gm, "");
+
+    if (cpf_cnpj.length === 11 || cpf_cnpj.length === 14) {
+      await sasjs
+        .request("jobs/buscaunificada", { [value]: [{}] })
+        .then((response) => {
+          let responseJson;
+          try {
+            responseJson = response;
+          } catch (e) {
+            console.error(e);
+          }
+          if (responseJson) {
+            createUnifiedView(responseJson);
+          }
+        });
+    }
+  }
+
+  function createUnifiedView(lista) {
+    let listas = [
+      {
+        nome: "Contas Encerradas",
+        valor: lista?.contas_encerradas,
+      },
+      {
+        nome: "Novos Clientes",
+        valor: lista?.novos_clientes,
+      },
+      {
+        nome: "Comunicados ao Coaf",
+        valor: lista?.comunicados_coaf,
+      },
+      {
+        nome: "Indice Internacional",
+        valor: lista?.indice_internacional,
+      },
+      {
+        nome: "Pep Aml",
+        valor: lista?.pep_aml,
+      },
+      {
+        nome: "Pep Aml Relacionado",
+        valor: lista?.pep_aml_relacionado,
+      },
+      {
+        nome: "Pep Aml Titular",
+        valor: lista?.pep_aml_titular,
+      },
+      {
+        nome: "Pep Serasa",
+        valor: lista?.pep_serasa,
+      },
+      {
+        nome: "Pep Siscoaf",
+        valor: lista?.pep_siscoaf,
+      },
+      {
+        nome: "Pessoa em Lista",
+        valor: lista?.pessoa_nome_cpf,
+      },
+      {
+        nome: "Mídias Desabonadoras",
+        valor: lista?.pessoa_noticias,
+      },
+      {
+        nome: "Restritiva Internacional",
+        valor: lista?.restritiva_internacional,
+      },
+      {
+        nome: "Restritiva Nacional",
+        valor: lista?.restritiva_nacional,
+      },
+      {
+        nome: "Restritivo Interno",
+        valor: lista?.restritivo_interno,
+      },
+      {
+        nome: "White List",
+        valor: lista?.white_list,
+      },
+    ];
+
+    const tabelas_div = document.querySelector("#tabelas");
+
+    listas.forEach((list) => {
+      const strong = document.createElement("strong");
+      strong.innerText = list?.nome;
+      const hr = document.createElement("hr");
+      const br = document.createElement("br");
+      const table = document.createElement("table");
+      table.classList.add("table");
+      table.classList.add("table-hover");
+      const thead = document.createElement("thead");
+      const tbody = document.createElement("tbody");
+
+      const th_row = document.createElement("tr");
+      const colunas = Object.keys(list?.valor[0]);
+
+      colunas.forEach((col) => {
+        const th = document.createElement("th");
+        th.scope = "col";
+        th.innerText = col;
+        th_row.appendChild(th);
+      });
+
+      list.valor.forEach((linha) => {
+        const tr = document.createElement("tr");
+        colunas.forEach((col) => {
+          const td = document.createElement("td");
+          td.innerText = linha[col];
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+
+      thead.appendChild(th_row);
+      table.appendChild(thead);
+      table.appendChild(tbody);
+      tabelas_div.appendChild(strong);
+      tabelas_div.appendChild(hr);
+      tabelas_div.appendChild(table);
+      tabelas_div.appendChild(br);
+    });
+
+    const buscaUnificada = document.querySelector("#busca_unificada");
+    _spinner.style.display = "none";
+    buscaUnificada.style.display = "";
+  }
+  /* BUSCA UNIFICADA END */
 });

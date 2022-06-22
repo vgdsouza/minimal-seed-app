@@ -153,7 +153,7 @@ svg {
   padding: 0 !important;
 }
 
-.mytable > div:first-child {
+#list_index {
   color: #f5f5f5;
   background-color: #414141;
   font-size: 2rem;
