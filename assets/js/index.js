@@ -641,9 +641,10 @@ window.addEventListener("load", function () {
         thead.appendChild(th_row);
         table.appendChild(thead);
         table.appendChild(tbody);
+        _div.appendChild(table);
         tabelas_div.appendChild(hr);
         tabelas_div.appendChild(strong);
-        tabelas_div.appendChild(table);
+        tabelas_div.appendChild(_div);
         tabelas_div.appendChild(br);
         tabelas_div.appendChild(br);
       }
@@ -651,7 +652,7 @@ window.addEventListener("load", function () {
 
     const verBuscaUnificada = document.querySelector("#ver_busca_unificada");
 
-    _listas.style.display = "none";
+    _spinner.style.display = "none";
     verBuscaUnificada.style.display = "";
   }
   /* BUSCA UNIFICADA END */
